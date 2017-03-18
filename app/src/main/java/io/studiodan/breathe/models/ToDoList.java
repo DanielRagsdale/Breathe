@@ -58,8 +58,8 @@ public class ToDoList implements Comparable<ToDoList>
      */
     public boolean removeFromChildren(ToDoList list)
     {
-        Log.d("Breathe", this.localName + this.toString());
-        Log.d("Breathe", list.localName + list.toString());
+        //Log.d("Breathe", this.localName + this.toString());
+        //Log.d("Breathe", list.localName + list.toString());
 
         for(ToDoList l : childLists)
         {
@@ -152,7 +152,7 @@ public class ToDoList implements Comparable<ToDoList>
 
             if(output != null)
             {
-                Log.d("Breathe", output.localName);
+                //Log.d("Breathe", output.localName);
                 output.fullName = localName + "/" + output.fullName;
                 break;
             }

@@ -242,7 +242,7 @@ public class ActivityAddTask extends AppCompatActivity implements DatePickerDial
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState)
         {
-            Log.d("Breathe", "Test " + savedInstanceState);
+            //Log.d("Breathe", "Test " + savedInstanceState);
 
             Bundle args = getArguments();
 

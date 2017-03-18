@@ -50,7 +50,7 @@ public class FragmentToDo extends Fragment
         try
         {
 
-            Log.v("Breathe", "********** File Read ***********" + mFilePath);
+//            Log.v("Breathe", "********** File Read ***********" + mFilePath);
 
             String data = UtilFile.getStringFromFile(mFilePath);
             JSONObject jsonData = new JSONObject(data);
@@ -59,7 +59,7 @@ public class FragmentToDo extends Fragment
         }
         catch(Exception e)
         {
-            Log.d("Breathe", e.toString() + "   while loading To-Do lists");
+            //Log.d("Breathe", e.toString() + "   while loading To-Do lists");
             e.printStackTrace();
         }
     }
@@ -132,7 +132,7 @@ public class FragmentToDo extends Fragment
         }
         catch (Exception e)
         {
-            Log.d("Breathe", e.toString() + "      while writing tdl");
+            //Log.d("Breathe", e.toString() + "      while writing tdl");
             e.printStackTrace();
         }
     }

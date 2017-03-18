@@ -20,19 +20,13 @@ public class CABTodo implements ActionMode.Callback
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item)
     {
-        Log.d("Breathe", mode.toString());
-        Log.d("Breathe", item.toString());
-
         mMultiSelector.launchAction(item.getItemId());
-
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu)
     {
-        // TODO Auto-generated method stub
         mode.getMenuInflater().inflate(R.menu.menu_edit_todo_item, menu);
         return true;
     }
@@ -46,8 +40,7 @@ public class CABTodo implements ActionMode.Callback
     @Override
     public boolean onPrepareActionMode(ActionMode mode, Menu menu)
     {
-        // TODO Auto-generated method stub
-        mode.setTitle("CheckBox is Checked");
+        mode.setTitle("Editing Lists");
         return false;
     }
 }

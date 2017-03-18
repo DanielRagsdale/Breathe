@@ -66,7 +66,7 @@ public class MultiSelector<T>
         mCheckedCount--;
         mSelectionItems.put(item, false);
 
-        Log.d("Breathe", "count " + mCheckedCount);
+        //Log.d("Breathe", "count " + mCheckedCount);
 
         if(mCheckedCount <= 0)
         {

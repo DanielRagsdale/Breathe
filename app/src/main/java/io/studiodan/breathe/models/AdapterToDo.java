@@ -94,10 +94,10 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
         @Override
         public void action(int actionID, Object obj)
         {
-            Log.d("Breathe", "Action called");
+            //Log.d("Breathe", "Action called");
             if(actionID == R.id.action_delete)
             {
-                Log.d("Breathe", "Action delete called");
+                //Log.d("Breathe", "Action delete called");
                 mDataset.removeFromChildren((ToDoList) obj);
                 notifyDataSetChanged();
             }

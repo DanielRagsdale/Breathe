@@ -7,6 +7,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,7 +42,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentDrawer.Fr
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
 
-        displayView(0);
+        displayView(1);
 
     }
 
@@ -64,6 +65,8 @@ public class ActivityMain extends AppCompatActivity implements FragmentDrawer.Fr
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings)
         {
+            //Log.d("Breathe", FragmentToDo.topList.toString());
+
             return true;
         }
 

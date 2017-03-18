@@ -42,6 +42,7 @@ public class AdapterChecklist implements ListAdapter
         mCheckItems = Arrays.asList(Arrays.copyOf(items.toArray(), items.size(), ToDoItem[].class));
         count = mCheckItems.size();
 
+        Collections.sort(mCheckItems);
         updateCount();
     }
 
@@ -120,6 +121,14 @@ public class AdapterChecklist implements ListAdapter
         return checkItem;
     }
 
+    /**
+     * Changes whether one of the Check Items is checked.
+     * Will then sort the list again
+     *
+     * @param position position of item to be updated
+     * @param checkState state of item after it is updated
+     * @return position of item after list is checked and then sorted
+     */
     public int updateCheckState(int position, boolean checkState)
     {
         ToDoItem item = mCheckItems.get(position);
@@ -134,6 +143,9 @@ public class AdapterChecklist implements ListAdapter
         return mCheckItems.indexOf(item);
     }
 
+    /**
+     * Update the count of unchecked items
+     */
     protected void updateCount()
     {
         int i;
@@ -149,7 +161,6 @@ public class AdapterChecklist implements ListAdapter
         count = i;
     }
 
-    //TODO
     @Override
     public int getItemViewType(int position) {
         return 0;
