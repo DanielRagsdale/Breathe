@@ -6,11 +6,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -27,17 +28,19 @@ import io.studiodan.breathe.util.UtilFile;
 /**
  * Fragment representing ToDoList pane
  */
-public class FragmentToDo extends Fragment
+public class FragmentLifeList extends Fragment
 {
     public static ToDoList topList = new ToDoList("all");
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private AdapterToDo mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     private FloatingActionButton mFABAdd;
 
     private String mFilePath;
+
+    private AdView mAdView;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -67,13 +70,14 @@ public class FragmentToDo extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_todo, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_life_list, container, false);
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_to_do_list);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
+        //mRecyclerView.setHasFixedSize(true);
+        //mRecyclerView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -88,9 +92,15 @@ public class FragmentToDo extends Fragment
             {
                 //Transition to add screen
                 Intent intent = new Intent(getActivity(), ActivityAddTask.class);
+
+                intent.putExtra(getString(R.string.single_ToDo_id), mAdapter.getSingleSelected());
                 getActivity().startActivity(intent);
             }
         });
+
+        mAdView = (AdView) rootView.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         // Inflate the layout for this fragment
         return rootView;

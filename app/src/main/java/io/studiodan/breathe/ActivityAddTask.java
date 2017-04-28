@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +21,7 @@ import android.widget.Toast;
 import io.studiodan.breathe.models.AdapterListSelect;
 import io.studiodan.breathe.models.ToDoItem;
 import io.studiodan.breathe.models.ToDoList;
-import io.studiodan.breathe.fragments.FragmentToDo;
+import io.studiodan.breathe.fragments.FragmentLifeList;
 
 /**
  * Activity representing pain to add tasks and sublists to a ToDoList
@@ -52,13 +51,19 @@ public class ActivityAddTask extends AppCompatActivity implements DatePickerDial
 
         mInputDate.setKeyListener(null);
 
-        AdapterListSelect adapter = new AdapterListSelect(FragmentToDo.topList);
+        AdapterListSelect adapter = new AdapterListSelect(FragmentLifeList.topList);
         mListSelect.setAdapter(adapter);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        int startList = getIntent().getExtras().getInt(getString(R.string.single_ToDo_id));
+        if(startList != -1)
+        {
+            mListSelect.setSelection(startList);
+        }
     }
 
     @Override
@@ -91,6 +96,19 @@ public class ActivityAddTask extends AppCompatActivity implements DatePickerDial
             }
 
             finish();
+        }
+        else if(id == R.id.action_add_task_no_close)
+        {
+            String itemName = mInputName.getText().toString();
+            if(!itemName.equals(""))
+            {
+                Toast.makeText(this, "Task Added", Toast.LENGTH_SHORT).show();
+
+                ToDoList list = (ToDoList) mListSelect.getSelectedItem();
+                list.add(new ToDoItem(itemName, dueYear, dueMonth, dueDay));
+
+                mInputName.setText("");
+            }
         }
 
         if(id == android.R.id.home)
@@ -207,7 +225,7 @@ public class ActivityAddTask extends AppCompatActivity implements DatePickerDial
                     String name = listName.getText().toString();
                     if(!name.equals(""))
                     {
-                        ToDoList list = FragmentToDo.topList;
+                        ToDoList list = FragmentLifeList.topList;
                         ToDoList activeList = list.getListAtPos(mListVal);
 
                         ToDoList newList = new ToDoList(name);

@@ -1,21 +1,30 @@
 package io.studiodan.breathe.models;
 
 import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.SortedSet;
+
+import io.studiodan.breathe.R;
 
 /**
  * Adapter representing checklist of tasks within a ToDoList
@@ -50,29 +59,24 @@ public class AdapterChecklist implements ListAdapter
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent)
     {
-        CheckBox checkItem = new CheckBox(parent.getContext());
+        RelativeLayout v = (RelativeLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_check, parent, false);
 
-        ToDoItem item = mCheckItems.get(position);
+        CheckBox checkItem = (CheckBox) v.findViewById(R.id.cb_item_check);
+        TextView bodyText = (TextView) v.findViewById(R.id.tv_body_check);
+        TextView dateText = (TextView) v.findViewById(R.id.tv_date_check);
 
-        checkItem.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16.0f);
+        final ToDoItem item = mCheckItems.get(position);
+
         checkItem.setChecked(item.isChecked);
 
-
-        final String tdlName = item.title;
         String dueDateString = "";
-
-        Rect bounds = new Rect();
-        checkItem.getPaint().getTextBounds(tdlName, 0, tdlName.length(), bounds);
-
-        int multiplier = Math.max(0, (750 - bounds.width()) / 10);
-        String padding = new String(new char[multiplier]).replace("\0", " ");
-
         if(item.dueDay != Integer.MAX_VALUE && item.dueMonth != Integer.MAX_VALUE && item.dueYear != Integer.MAX_VALUE)
         {
             dueDateString = (item.dueMonth + 1) + "/" + item.dueDay + "/" + item.dueYear;
         }
 
-        checkItem.setText(tdlName + padding + dueDateString);
+        bodyText.setText(item.title);
+        dateText.setText(dueDateString);
 
         checkItem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
@@ -83,7 +87,7 @@ public class AdapterChecklist implements ListAdapter
                 {
 //                    Toast t = Toast.makeText(parent.getContext(), "Congrats on getting work done!", Toast.LENGTH_SHORT);
 //                    t.show();
-                    String itemText = tdlName;
+                    String itemText = item.title;
                     String message;
 
                     if(itemText.length() > 25)
@@ -118,7 +122,7 @@ public class AdapterChecklist implements ListAdapter
             }
         });
 
-        return checkItem;
+        return v;
     }
 
     /**

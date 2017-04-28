@@ -77,14 +77,14 @@ public class MultiSelector<T>
         }
     }
 
-    private void displayCAB()
+    /**
+     * Get the number of items that are currently checked
+     *
+     * @return
+     */
+    public int getCheckCount()
     {
-        if(!mCABDisplayed)
-        {
-            //TODO Generalize CAB display
-            mActionMode = mParentActivity.startActionMode(new CABTodo(this));
-            mCABDisplayed = true;
-        }
+        return mCheckedCount;
     }
 
     public void launchAction(int actionID)
@@ -108,4 +108,15 @@ public class MultiSelector<T>
             mActionObj.clear(i);
         }
     }
+
+    private void displayCAB()
+    {
+        if(!mCABDisplayed)
+        {
+            //TODO Generalize CAB display
+            mActionMode = mParentActivity.startActionMode(new CABTodo(this));
+            mCABDisplayed = true;
+        }
+    }
+
 }

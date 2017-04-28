@@ -7,13 +7,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import io.studiodan.breathe.fragments.FragmentDrawer;
-import io.studiodan.breathe.fragments.FragmentToDo;
+import io.studiodan.breathe.fragments.FragmentLifeList;
 import io.studiodan.breathe.fragments.OneFragment;
 import io.studiodan.breathe.fragments.ThreeFragment;
 
@@ -22,7 +24,6 @@ import io.studiodan.breathe.fragments.ThreeFragment;
  */
 public class ActivityMain extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener
 {
-
     private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
 
@@ -65,7 +66,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentDrawer.Fr
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings)
         {
-            //Log.d("Breathe", FragmentToDo.topList.toString());
+            //Log.d("Breathe", FragmentLifeList.topList.toString());
 
             return true;
         }
@@ -94,7 +95,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentDrawer.Fr
                 title = getString(R.string.title_home);
                 break;
             case 1:
-                fragment = new FragmentToDo();
+                fragment = new FragmentLifeList();
                 title = getString(R.string.title_ToDo);
                 break;
             case 2:
