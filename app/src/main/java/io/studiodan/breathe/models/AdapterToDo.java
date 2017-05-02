@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,13 @@ import android.widget.TextView;
 import io.studiodan.breathe.ActivityInspectList;
 import io.studiodan.breathe.R;
 import io.studiodan.breathe.fragments.FragmentLifeList;
+import io.studiodan.breathe.util.multiselector.ActionToDo;
 import io.studiodan.breathe.util.multiselector.MultiSelector;
 import io.studiodan.breathe.util.multiselector.MultiSelectorAction;
 
 public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
 {
-    private ToDoList mDataset;
+    public ToDoList mDataset;
     private FragmentLifeList mParentFrag;
 
     MultiSelector<ToDoList> mListSelector;
@@ -106,57 +108,19 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
         }
     }
 
-    public class ViewHolderAction extends MultiSelectorAction
+    public class ActionCheckItem extends MultiSelectorAction
     {
         @Override
         public void action(int actionID, Object obj)
         {
-            //Log.d("Breathe", "Action called");
-            if(actionID == R.id.action_delete)
-            {
-                //Log.d("Breathe", "Action delete called");
-                mDataset.removeFromChildren((ToDoList) obj);
-                mListSelector.unselectItem((ToDoList) obj);
-                notifyDataSetChanged();
-            }
+
         }
 
         @Override
         public void clear(Object obj)
         {
-            //mClickState = false;
-            //setVisualClickState(mClickState);
+            Log.d("Breathe", "Clear called");
             notifyDataSetChanged();
-        }
-
-        @Override
-        public boolean allowUndo(int actionID)
-        {
-            if(actionID == R.id.action_delete)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public void undo(int actionID, Object obj)
-        {
-        }
-    }
-
-    public class CheckItemAction extends MultiSelectorAction
-    {
-        @Override
-        public void action(int actionID, Object obj)
-        {
-
-        }
-
-        @Override
-        public void clear(Object obj)
-        {
-
         }
 
         @Override
@@ -172,8 +136,8 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
         mDataset = lists;
         mParentFrag = parentFrag;
 
-        mListSelector = new MultiSelector<>(mParentFrag.getActivity(), new ViewHolderAction(), R.menu.menu_edit_todo_item);
-        mItemSelector = new MultiSelector<>(mParentFrag.getActivity(), new CheckItemAction(), R.menu.menu_edit_todo_item);
+        mListSelector = new MultiSelector<>(mParentFrag.getActivity(), new ActionToDo(mListSelector, this), R.menu.menu_edit_todo_item);
+        mItemSelector = new MultiSelector<>(mParentFrag.getActivity(), new ActionCheckItem(), R.menu.menu_edit_todo_item);
 
         MultiSelector.createExclusivity(mListSelector, mItemSelector);
     }

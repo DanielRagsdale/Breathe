@@ -152,15 +152,13 @@ public class AdapterChecklist implements ListAdapter
             }
         });
 
-        mMultiSelector.registerItem(item);
 
+        mMultiSelector.registerItem(item);
         v.setOnLongClickListener(new View.OnLongClickListener()
         {
             @Override
             public boolean onLongClick(View v)
             {
-                Log.d("Breathe", "Long Click Registered");
-
                 boolean toState = !mMultiSelector.getSelectState(item);
 
                 if(mMultiSelector.setSelectState(item, toState))
@@ -223,6 +221,33 @@ public class AdapterChecklist implements ListAdapter
         count = i;
     }
 
+    private void callObservers()
+    {
+        for (DataSetObserver observer : mObservers)
+        {
+            observer.onChanged();
+        }
+    }
+
+    public void setHeightBasedOnChildren()
+    {
+        int totalHeight = 0;
+
+        heightLoop:
+        for (int i = 0; i < getCount(); i++)
+        {
+            View listItem = getView(i, null, mParentList);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = mParentList.getLayoutParams();
+        params.height = totalHeight + (mParentList.getDividerHeight() * (getCount() - 1));
+        mParentList.setLayoutParams(params);
+        mParentList.requestLayout();
+    }
+
+    //region trivial methods
     @Override
     public int getItemViewType(int position) {
         return 0;
@@ -240,8 +265,6 @@ public class AdapterChecklist implements ListAdapter
         return pos < mCheckItems.size();
     }
 
-
-    //region trivial methods
     //MVP
     @Override
     public void registerDataSetObserver(DataSetObserver observer) {
@@ -295,30 +318,4 @@ public class AdapterChecklist implements ListAdapter
         return mCheckItems.size() == 0;
     }
     //endregion
-
-    private void callObservers()
-    {
-        for (DataSetObserver observer : mObservers)
-        {
-            observer.onChanged();
-        }
-    }
-
-    public void setHeightBasedOnChildren()
-    {
-        int totalHeight = 0;
-
-        heightLoop:
-        for (int i = 0; i < getCount(); i++)
-        {
-            View listItem = getView(i, null, mParentList);
-            listItem.measure(0, 0);
-            totalHeight += listItem.getMeasuredHeight();
-        }
-
-        ViewGroup.LayoutParams params = mParentList.getLayoutParams();
-        params.height = totalHeight + (mParentList.getDividerHeight() * (getCount() - 1));
-        mParentList.setLayoutParams(params);
-        mParentList.requestLayout();
-    }
 }
