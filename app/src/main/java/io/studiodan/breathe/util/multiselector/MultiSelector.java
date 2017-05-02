@@ -4,28 +4,31 @@ import android.app.Activity;
 import android.util.Log;
 import android.view.ActionMode;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-
-import io.studiodan.breathe.models.CABNull;
-import io.studiodan.breathe.models.CABTodo;
+import java.util.List;
 
 public class MultiSelector<T>
 {
+    MultiSelector[] mExclusiveItems;
+
     HashMap<T, Boolean> mSelectionItems = new HashMap<>();
 
     int mCount;
     int mCheckedCount;
     boolean mCABDisplayed = false;
+    int mCABMenuID;
 
     ActionMode mActionMode;
 
     Activity mParentActivity;
-    IMultiSelectorAction mActionObj;
+    MultiSelectorAction mActionObj;
 
-    public MultiSelector(Activity activity, IMultiSelectorAction actionObj)
+    public MultiSelector(Activity activity, MultiSelectorAction actionObj, int CABMenuID)
     {
         mParentActivity = activity;
         mActionObj = actionObj;
+        mCABMenuID = CABMenuID;
     }
 
     /**
@@ -35,6 +38,7 @@ public class MultiSelector<T>
      */
     public void registerItem(T item)
     {
+
         if(!mSelectionItems.keySet().contains(item))
         {
             mSelectionItems.put(item, false);
@@ -48,33 +52,71 @@ public class MultiSelector<T>
      * @param item the backing object of desired view
      * @return the selection status
      */
-    public boolean getCheckState(T item)
+    public boolean getSelectState(T item)
     {
         return mSelectionItems.get(item);
     }
 
-    public void checkItem(T item)
+    public boolean setSelectState(T item, boolean state)
     {
-        mCheckedCount++;
-
-        displayCAB();
-        mSelectionItems.put(item, true);
+        if(state == true)
+        {
+            return selectItem(item);
+        }
+        else
+        {
+            return unselectItem(item);
+        }
     }
 
-    public void uncheckItem(T item)
+    /**
+     * Select an item
+     *
+     * @param item
+     * @return was the item successfully selected?
+     */
+    public boolean selectItem(T item)
     {
-        mCheckedCount--;
-        mSelectionItems.put(item, false);
-
-        //Log.d("Breathe", "count " + mCheckedCount);
-
-        if(mCheckedCount <= 0)
+        if(isFree())
         {
-            mCheckedCount = 0;
 
-            mActionMode.finish();
-            mCABDisplayed = false;
+            mCheckedCount++;
+
+            displayCAB();
+            mSelectionItems.put(item, true);
+            return true;
         }
+
+        return false;
+    }
+
+    /**
+     * Unselect an item
+     *
+     * @param item
+     * @return was the item successfully unselected?
+     */
+    public boolean unselectItem(T item)
+    {
+        if(isFree())
+        {
+            mCheckedCount--;
+            mSelectionItems.put(item, false);
+
+            //Log.d("Breathe", "count " + mCheckedCount);
+
+            if (mCheckedCount <= 0)
+            {
+                mCheckedCount = 0;
+
+                mActionMode.finish();
+                mCABDisplayed = false;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -89,12 +131,22 @@ public class MultiSelector<T>
 
     public void launchAction(int actionID)
     {
+        List<T> actedObjects = new ArrayList<T>();
+
         for(T i : mSelectionItems.keySet())
         {
-            if(mSelectionItems.get(i) == true)
+            if(mSelectionItems.get(i) == true && i != null)
             {
-
                 mActionObj.action(actionID, i);
+                actedObjects.add(i);
+            }
+        }
+
+        if(mActionObj.allowUndo(actionID))
+        {
+            for(T i : actedObjects)
+            {
+                mActionObj.undo(actionID, i);
             }
         }
     }
@@ -105,6 +157,7 @@ public class MultiSelector<T>
         mCABDisplayed = false;
         for(T i : mSelectionItems.keySet())
         {
+            unselectItem(i);
             mActionObj.clear(i);
         }
     }
@@ -114,9 +167,41 @@ public class MultiSelector<T>
         if(!mCABDisplayed)
         {
             //TODO Generalize CAB display
-            mActionMode = mParentActivity.startActionMode(new CABTodo(this));
+            mActionMode = mParentActivity.startActionMode(new CABGeneric(this, mCABMenuID));
             mCABDisplayed = true;
         }
     }
 
+    private boolean isFree()
+    {
+        if(mExclusiveItems == null || mExclusiveItems.length == 0)
+        {
+            //return true;
+        }
+
+        for(MultiSelector i : mExclusiveItems)
+        {
+            Log.d("Breathe", "Exclusive test " + i + "  " + i.getCheckCount());
+
+            if(i != this && i.getCheckCount() > 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Create link between MultiSelectors such that only one can be in use at a time
+     *
+     * @param selectors
+     */
+    public static void createExclusivity(MultiSelector ... selectors)
+    {
+        for(MultiSelector i : selectors)
+        {
+            Log.d("Breathe", "Selectors Length:   " + selectors.length);
+            i.mExclusiveItems = selectors;
+        }
+    }
 }

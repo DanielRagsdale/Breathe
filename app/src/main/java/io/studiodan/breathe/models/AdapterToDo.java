@@ -14,21 +14,21 @@ import io.studiodan.breathe.ActivityInspectList;
 import io.studiodan.breathe.R;
 import io.studiodan.breathe.fragments.FragmentLifeList;
 import io.studiodan.breathe.util.multiselector.MultiSelector;
-import io.studiodan.breathe.util.multiselector.IMultiSelectorAction;
+import io.studiodan.breathe.util.multiselector.MultiSelectorAction;
 
 public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
 {
     private ToDoList mDataset;
     private FragmentLifeList mParentFrag;
 
-    MultiSelector<ToDoList> mSelector;
+    MultiSelector<ToDoList> mListSelector;
+    MultiSelector<ToDoItem> mItemSelector;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener
     {
-        boolean mClickState;
         ToDoList mList;
 
         // each data item is just a string in this case
@@ -49,15 +49,25 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
 
         public void setListRepresentation(ToDoList list)
         {
+            if(list == null)
+            {
+                mCardView.setVisibility(View.INVISIBLE);
+                mCardView.setMinimumHeight(mCardView.getHeight() + 130);
+                return;
+            }
+
+            mCardView.setMinimumHeight(0);
+
+            mCardView.setVisibility(View.VISIBLE);
+
             mList = list;
-            mSelector.registerItem(mList);
+            mListSelector.registerItem(mList);
 
             mTitleTextView.setText(mList.fullName);
-            mBodyListView.setAdapter(new AdapterChecklist(mList.getItems(), mBodyListView));
+            mBodyListView.setAdapter(new AdapterChecklist(mList.getItems(), mBodyListView, mItemSelector));
             ((AdapterChecklist) mBodyListView.getAdapter()).setHeightBasedOnChildren();
 
-            mClickState = mSelector.getCheckState(mList);
-            setVisualClickState(mClickState);
+            setVisualClickState(mListSelector.getSelectState(mList));
         }
 
         @Override
@@ -73,18 +83,14 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
         @Override
         public boolean onLongClick(View v)
         {
-            mClickState = !mClickState;
-            setVisualClickState(mClickState);
+            boolean toState = !mListSelector.getSelectState(mList);
 
-            if(mClickState)
+            if(mListSelector.setSelectState(mList, toState))
             {
-                mSelector.checkItem(mList);
-            }
-            else {
-                mSelector.uncheckItem(mList);
+                setVisualClickState(toState);
             }
 
-            return false;
+            return true;
         }
 
         private void setVisualClickState(boolean state)
@@ -100,29 +106,7 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
         }
     }
 
-    /**
-     * If a single list is selected, return the id of that list.
-     * Otherwise, return -1.
-     *
-     * @return id of selected list
-     */
-    public int getSingleSelected()
-    {
-        if(mSelector.getCheckCount() == 1)
-        {
-            for (int i = 0; i < mDataset.getTotalListCount(); i++)
-            {
-                if (mSelector.getCheckState(mDataset.getListAtPos(i)))
-                {
-                    return i;
-                }
-            }
-        }
-
-        return -1;
-    }
-
-    public class ViewHolderAction implements IMultiSelectorAction
+    public class ViewHolderAction extends MultiSelectorAction
     {
         @Override
         public void action(int actionID, Object obj)
@@ -132,6 +116,7 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
             {
                 //Log.d("Breathe", "Action delete called");
                 mDataset.removeFromChildren((ToDoList) obj);
+                mListSelector.unselectItem((ToDoList) obj);
                 notifyDataSetChanged();
             }
         }
@@ -141,9 +126,43 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
         {
             //mClickState = false;
             //setVisualClickState(mClickState);
-
-            mSelector.uncheckItem((ToDoList) obj);
             notifyDataSetChanged();
+        }
+
+        @Override
+        public boolean allowUndo(int actionID)
+        {
+            if(actionID == R.id.action_delete)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void undo(int actionID, Object obj)
+        {
+        }
+    }
+
+    public class CheckItemAction extends MultiSelectorAction
+    {
+        @Override
+        public void action(int actionID, Object obj)
+        {
+
+        }
+
+        @Override
+        public void clear(Object obj)
+        {
+
+        }
+
+        @Override
+        public boolean allowUndo(int actionID)
+        {
+            return false;
         }
     }
 
@@ -153,7 +172,32 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
         mDataset = lists;
         mParentFrag = parentFrag;
 
-        mSelector = new MultiSelector<>(mParentFrag.getActivity(), new ViewHolderAction());
+        mListSelector = new MultiSelector<>(mParentFrag.getActivity(), new ViewHolderAction(), R.menu.menu_edit_todo_item);
+        mItemSelector = new MultiSelector<>(mParentFrag.getActivity(), new CheckItemAction(), R.menu.menu_edit_todo_item);
+
+        MultiSelector.createExclusivity(mListSelector, mItemSelector);
+    }
+
+    /**
+     * If a single list is selected, return the id of that list.
+     * Otherwise, return -1.
+     *
+     * @return id of selected list
+     */
+    public int getSingleSelected()
+    {
+        if(mListSelector.getCheckCount() == 1)
+        {
+            for (int i = 0; i < mDataset.getTotalListCount(); i++)
+            {
+                if (mListSelector.getSelectState(mDataset.getListAtPos(i)))
+                {
+                    return i;
+                }
+            }
+        }
+
+        return -1;
     }
 
     // Create new views (invoked by the layout manager)
@@ -173,6 +217,12 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
     @Override
     public void onBindViewHolder(ViewHolder holder, int position)
     {
+        if(position == getItemCount() - 1)
+        {
+            holder.setListRepresentation(null);
+            return;
+        }
+
         ToDoList nList = mDataset.getListAtPos(position);
 
         // - get element from your dataset at this position
@@ -184,6 +234,6 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
     @Override
     public int getItemCount()
     {
-        return mDataset.getTotalListCount();
+        return mDataset.getTotalListCount() + 1;
     }
 }

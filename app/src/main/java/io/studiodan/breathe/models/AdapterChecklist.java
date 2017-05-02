@@ -25,6 +25,9 @@ import java.util.List;
 import java.util.SortedSet;
 
 import io.studiodan.breathe.R;
+import io.studiodan.breathe.util.multiselector.MultiSelector;
+
+import static android.R.id.message;
 
 /**
  * Adapter representing checklist of tasks within a ToDoList
@@ -36,17 +39,37 @@ public class AdapterChecklist implements ListAdapter
     private List<ToDoItem> mCheckItems;
     private List<DataSetObserver> mObservers = new ArrayList<DataSetObserver>();
 
-    int count;
+    private int count;
+
+    private boolean mDisplayChecked;
+    private MultiSelector<ToDoItem> mMultiSelector;
 
     /**
      * Create AdapterChecklist for pList with items
      *
      * @param items Items contained in checklist
      * @param pList Listview containing the items
+     * @param dispChecked should checked items be displayed
+     * @param multiSelector multiSelector used by this checklist
      */
-    public AdapterChecklist(SortedSet<ToDoItem> items, ListView pList)
+    public AdapterChecklist(SortedSet<ToDoItem> items, ListView pList, boolean dispChecked, MultiSelector<ToDoItem> multiSelector)
+    {
+        this(items, pList, multiSelector);
+
+        mDisplayChecked = dispChecked;
+    }
+
+    /**
+     * Create AdapterChecklist for pList with items
+     *
+     * @param items Items contained in checklist
+     * @param pList Listview containing the items
+     * @param multiSelector multiSelector used by this checklist
+     */
+    public AdapterChecklist(SortedSet<ToDoItem> items, ListView pList, MultiSelector<ToDoItem> multiSelector)
     {
         mParentList = pList;
+        mMultiSelector = multiSelector;
 
         mCheckItems = Arrays.asList(Arrays.copyOf(items.toArray(), items.size(), ToDoItem[].class));
         count = mCheckItems.size();
@@ -55,7 +78,7 @@ public class AdapterChecklist implements ListAdapter
         updateCount();
     }
 
-    //TODO
+    //TODO make more organized
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent)
     {
@@ -85,25 +108,32 @@ public class AdapterChecklist implements ListAdapter
             {
                 if(isChecked)
                 {
-//                    Toast t = Toast.makeText(parent.getContext(), "Congrats on getting work done!", Toast.LENGTH_SHORT);
-//                    t.show();
                     String itemText = item.title;
                     String message;
 
-                    if(itemText.length() > 25)
+                    String occurrence;
+                    if(mDisplayChecked)
                     {
-                        message = itemText.substring(0, 22) + "... hidden";
+                        occurrence = " checked";
                     }
                     else
                     {
-                        message = itemText + " hidden";
+                        occurrence = " hidden";
+                    }
+
+                    if(itemText.length() > 25)
+                    {
+                        message = itemText.substring(0, 22) + "..." + occurrence;
+                    }
+                    else
+                    {
+                        message = itemText + occurrence;
                     }
 
                     final int newPos = updateCheckState(position, true);
 
-                    Snackbar s = Snackbar
-                            .make(parent, message, Snackbar.LENGTH_LONG)
-                            .setAction("UNDO", new View.OnClickListener()
+                    Snackbar s = Snackbar.make(parent, message, Snackbar.LENGTH_LONG).setAction("UNDO",
+                            new View.OnClickListener()
                             {
                                 @Override
                                 public void onClick(View v)
@@ -119,6 +149,34 @@ public class AdapterChecklist implements ListAdapter
                 {
                     updateCheckState(position, false);
                 }
+            }
+        });
+
+        mMultiSelector.registerItem(item);
+
+        v.setOnLongClickListener(new View.OnLongClickListener()
+        {
+            @Override
+            public boolean onLongClick(View v)
+            {
+                Log.d("Breathe", "Long Click Registered");
+
+                boolean toState = !mMultiSelector.getSelectState(item);
+
+                if(mMultiSelector.setSelectState(item, toState))
+                {
+                    if (toState)
+                    {
+                        v.setBackgroundColor(Color.parseColor("#F8BBD0"));
+                    }
+                    else
+                    {
+                        v.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
+                    }
+                    return true;
+                }
+
+                return false;
             }
         });
 
@@ -198,7 +256,13 @@ public class AdapterChecklist implements ListAdapter
 
     //MVP
     @Override
-    public int getCount() {
+    public int getCount()
+    {
+        if(mDisplayChecked)
+        {
+            return mCheckItems.size();
+        }
+
         return count;
     }
 

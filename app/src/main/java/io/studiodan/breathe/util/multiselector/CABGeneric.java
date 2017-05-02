@@ -1,4 +1,4 @@
-package io.studiodan.breathe.models;
+package io.studiodan.breathe.util.multiselector;
 
 import android.util.Log;
 import android.view.ActionMode;
@@ -6,15 +6,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import io.studiodan.breathe.R;
+import io.studiodan.breathe.util.multiselector.CABGeneric;
 import io.studiodan.breathe.util.multiselector.MultiSelector;
 
-public class CABTodo implements ActionMode.Callback
+public class CABGeneric implements ActionMode.Callback
 {
     MultiSelector mMultiSelector;
+    int mMenuID;
 
-    public CABTodo(MultiSelector selector)
+    public CABGeneric(MultiSelector selector, int menuID)
     {
         mMultiSelector = selector;
+        mMenuID = menuID;
     }
 
     @Override
@@ -27,7 +30,7 @@ public class CABTodo implements ActionMode.Callback
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu)
     {
-        mode.getMenuInflater().inflate(R.menu.menu_edit_todo_item, menu);
+        mode.getMenuInflater().inflate(mMenuID, menu);
         return true;
     }
 

@@ -16,27 +16,37 @@
         android:overScrollMode="always"
         android:id="@+id/rv_to_do_list" />
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id"
-        ></com.google.android.gms.ads.AdView>
-
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
         app:borderWidth="0dp"
-        android:layout_margin="14dp"
+        android:layout_marginRight="14dp"
+        android:layout_marginBottom="14dp"
+        android:padding="14dp"
         app:elevation="8dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         app:fabSize="normal"
         app:srcCompat="@drawable/ic_plus_white_48dp"
         android:id="@+id/fab_add_todo"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_toStartOf="@+id/fab_add_todo">
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            ads:adSize="BANNER"
+            android:layout_centerHorizontal="true"
+            ads:adUnitId="@string/banner_ad_unit_id"
+            ></com.google.android.gms.ads.AdView>
+
+    </RelativeLayout>
 
 </RelativeLayout>
