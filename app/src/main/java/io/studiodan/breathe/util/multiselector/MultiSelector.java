@@ -17,17 +17,19 @@ public class MultiSelector<T>
     int mCheckedCount;
     boolean mCABDisplayed = false;
     int mCABMenuID;
+    String mCABMenuTitle;
 
     ActionMode mActionMode;
 
     Activity mParentActivity;
     ActionMultiSelector mActionObj;
 
-    public MultiSelector(Activity activity, ActionMultiSelector actionObj, int CABMenuID)
+    public MultiSelector(Activity activity, ActionMultiSelector actionObj, int CABMenuID, String menuTitle)
     {
         mParentActivity = activity;
         mActionObj = actionObj;
         mCABMenuID = CABMenuID;
+        mCABMenuTitle = menuTitle;
     }
 
     /**
@@ -168,7 +170,7 @@ public class MultiSelector<T>
         if(!mCABDisplayed)
         {
             //TODO Generalize CAB display
-            mActionMode = mParentActivity.startActionMode(new CABGeneric(this, mCABMenuID));
+            mActionMode = mParentActivity.startActionMode(new CABGeneric(this, mCABMenuID, mCABMenuTitle));
             mCABDisplayed = true;
         }
     }

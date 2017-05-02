@@ -13,11 +13,13 @@ public class CABGeneric implements ActionMode.Callback
 {
     MultiSelector mMultiSelector;
     int mMenuID;
+    String mTitle;
 
-    public CABGeneric(MultiSelector selector, int menuID)
+    public CABGeneric(MultiSelector selector, int menuID, String title)
     {
         mMultiSelector = selector;
         mMenuID = menuID;
+        mTitle = title;
     }
 
     @Override
@@ -43,7 +45,7 @@ public class CABGeneric implements ActionMode.Callback
     @Override
     public boolean onPrepareActionMode(ActionMode mode, Menu menu)
     {
-        mode.setTitle("Editing Lists");
+        mode.setTitle(mTitle);
         return false;
     }
 }

@@ -65,7 +65,7 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
             mListSelector.registerItem(mList);
 
             mTitleTextView.setText(mList.fullName);
-            mBodyListView.setAdapter(new AdapterChecklist(mList.getItems(), mBodyListView, mItemSelector));
+            mBodyListView.setAdapter(new AdapterChecklist(mList, mBodyListView, mItemSelector));
             ((AdapterChecklist) mBodyListView.getAdapter()).setHeightBasedOnChildren();
 
             setVisualClickState(mListSelector.getSelectState(mList));
@@ -114,11 +114,11 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
         mParentFrag = parentFrag;
 
         ActionToDo atd = new ActionToDo(this);
-        mListSelector = new MultiSelector<>(mParentFrag.getActivity(), atd, R.menu.menu_edit_todo_item);
+        mListSelector = new MultiSelector<>(mParentFrag.getActivity(), atd, R.menu.menu_edit_todo_list, "Editing Lists");
         atd.setMultiSelector(mListSelector);
 
         ActionCheckItemMulti acim = new ActionCheckItemMulti(this);
-        mItemSelector = new MultiSelector<>(mParentFrag.getActivity(), acim, R.menu.menu_edit_todo_item);
+        mItemSelector = new MultiSelector<>(mParentFrag.getActivity(), acim, R.menu.menu_edit_todo_item, "Editing Items");
         acim.setMultiSelector(mItemSelector);
 
         MultiSelector.createExclusivity(mListSelector, mItemSelector);

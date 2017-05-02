@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import io.studiodan.breathe.fragments.FragmentLifeList;
 import io.studiodan.breathe.models.AdapterChecklist;
-import io.studiodan.breathe.models.AdapterToDo;
 import io.studiodan.breathe.models.ToDoItem;
 import io.studiodan.breathe.models.ToDoList;
+import io.studiodan.breathe.util.multiselector.ActionCheckItemSingle;
 import io.studiodan.breathe.util.multiselector.MultiSelector;
 
 public class ActivityInspectList extends AppCompatActivity
@@ -53,10 +53,17 @@ public class ActivityInspectList extends AppCompatActivity
         mTitle.setText(mList.fullName);
 
         MultiSelector<ToDoItem> ms;
-        ms = new MultiSelector<>(this, null, R.menu.menu_edit_todo_item);
 
-        mBody.setAdapter(new AdapterChecklist(mList.getItems(), mBody, true, ms));
-        ((AdapterChecklist) mBody.getAdapter()).setHeightBasedOnChildren();
+
+        ActionCheckItemSingle acis = new ActionCheckItemSingle(mList);
+        ms = new MultiSelector<>(this, acis, R.menu.menu_edit_todo_list, "Editing Items");
+
+        AdapterChecklist adapter = new AdapterChecklist(mList, mBody, true, ms);
+        mBody.setAdapter(adapter);
+        adapter.setHeightBasedOnChildren();
+
+        acis.setAdapter(adapter);
+        acis.setMultiSelector(ms);
 
     }
 

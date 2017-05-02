@@ -35,6 +35,7 @@ import static android.R.id.message;
 public class AdapterChecklist implements ListAdapter
 {
     private ListView mParentList;
+    private ToDoList mToDoList;
 
     private List<ToDoItem> mCheckItems;
     private List<DataSetObserver> mObservers = new ArrayList<DataSetObserver>();
@@ -47,14 +48,14 @@ public class AdapterChecklist implements ListAdapter
     /**
      * Create AdapterChecklist for pList with items
      *
-     * @param items Items contained in checklist
+     * @param list Items contained in checklist
      * @param pList Listview containing the items
      * @param dispChecked should checked items be displayed
      * @param multiSelector multiSelector used by this checklist
      */
-    public AdapterChecklist(SortedSet<ToDoItem> items, ListView pList, boolean dispChecked, MultiSelector<ToDoItem> multiSelector)
+    public AdapterChecklist(ToDoList list, ListView pList, boolean dispChecked, MultiSelector<ToDoItem> multiSelector)
     {
-        this(items, pList, multiSelector);
+        this(list, pList, multiSelector);
 
         mDisplayChecked = dispChecked;
     }
@@ -62,20 +63,35 @@ public class AdapterChecklist implements ListAdapter
     /**
      * Create AdapterChecklist for pList with items
      *
-     * @param items Items contained in checklist
+     * @param list Items contained in checklist
      * @param pList Listview containing the items
      * @param multiSelector multiSelector used by this checklist
      */
-    public AdapterChecklist(SortedSet<ToDoItem> items, ListView pList, MultiSelector<ToDoItem> multiSelector)
+    public AdapterChecklist(ToDoList list, ListView pList, MultiSelector<ToDoItem> multiSelector)
     {
         mParentList = pList;
+        mToDoList = list;
         mMultiSelector = multiSelector;
+
+        buildItems();
+    }
+
+    private void buildItems()
+    {
+        SortedSet<ToDoItem> items = mToDoList.getItems();
 
         mCheckItems = Arrays.asList(Arrays.copyOf(items.toArray(), items.size(), ToDoItem[].class));
         count = mCheckItems.size();
 
         Collections.sort(mCheckItems);
         updateCount();
+    }
+
+    public void updateList()
+    {
+        buildItems();
+        setHeightBasedOnChildren();
+        callObservers();
     }
 
     //TODO make more organized
@@ -221,7 +237,7 @@ public class AdapterChecklist implements ListAdapter
         count = i;
     }
 
-    private void callObservers()
+    public void callObservers()
     {
         for (DataSetObserver observer : mObservers)
         {
