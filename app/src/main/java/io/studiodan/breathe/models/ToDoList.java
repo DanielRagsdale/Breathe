@@ -52,7 +52,7 @@ public class ToDoList implements Comparable<ToDoList>
     }
 
     /**
-     * remove list from children
+     * Remove list from children
      *
      * @return was list successfully removed
      */
@@ -73,6 +73,49 @@ public class ToDoList implements Comparable<ToDoList>
                 return true;
             }
         }
+        return false;
+    }
+
+    /**
+     * Remove item from children or this list
+     *
+     * @return was item successfully removed
+     */
+    public boolean removeFromChildren(ToDoItem item)
+    {
+
+        if(removeItem(item))
+        {
+            return true;
+        }
+        else
+        {
+            for (ToDoList l : childLists)
+            {
+                if(l.removeFromChildren(item))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Remove item from this list
+     *
+     * @param item to be removed
+     * @return was item successfully removed
+     */
+    public boolean removeItem(ToDoItem item)
+    {
+        if(items.contains(item))
+        {
+            items.remove(item);
+            return true;
+        }
+
         return false;
     }
 

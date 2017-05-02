@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +13,9 @@ import android.widget.TextView;
 import io.studiodan.breathe.ActivityInspectList;
 import io.studiodan.breathe.R;
 import io.studiodan.breathe.fragments.FragmentLifeList;
+import io.studiodan.breathe.util.multiselector.ActionCheckItemMulti;
 import io.studiodan.breathe.util.multiselector.ActionToDo;
 import io.studiodan.breathe.util.multiselector.MultiSelector;
-import io.studiodan.breathe.util.multiselector.MultiSelectorAction;
 
 public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
 {
@@ -108,36 +107,19 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
         }
     }
 
-    public class ActionCheckItem extends MultiSelectorAction
-    {
-        @Override
-        public void action(int actionID, Object obj)
-        {
-
-        }
-
-        @Override
-        public void clear(Object obj)
-        {
-            Log.d("Breathe", "Clear called");
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public boolean allowUndo(int actionID)
-        {
-            return false;
-        }
-    }
-
     // Provide a suitable constructor (depends on the kind of dataset)
     public AdapterToDo(ToDoList lists, FragmentLifeList parentFrag)
     {
         mDataset = lists;
         mParentFrag = parentFrag;
 
-        mListSelector = new MultiSelector<>(mParentFrag.getActivity(), new ActionToDo(mListSelector, this), R.menu.menu_edit_todo_item);
-        mItemSelector = new MultiSelector<>(mParentFrag.getActivity(), new ActionCheckItem(), R.menu.menu_edit_todo_item);
+        ActionToDo atd = new ActionToDo(this);
+        mListSelector = new MultiSelector<>(mParentFrag.getActivity(), atd, R.menu.menu_edit_todo_item);
+        atd.setMultiSelector(mListSelector);
+
+        ActionCheckItemMulti acim = new ActionCheckItemMulti(this);
+        mItemSelector = new MultiSelector<>(mParentFrag.getActivity(), acim, R.menu.menu_edit_todo_item);
+        acim.setMultiSelector(mItemSelector);
 
         MultiSelector.createExclusivity(mListSelector, mItemSelector);
     }

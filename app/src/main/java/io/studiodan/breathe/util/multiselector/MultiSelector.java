@@ -1,7 +1,6 @@
 package io.studiodan.breathe.util.multiselector;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.ActionMode;
 
 import java.util.ArrayList;
@@ -22,9 +21,9 @@ public class MultiSelector<T>
     ActionMode mActionMode;
 
     Activity mParentActivity;
-    MultiSelectorAction mActionObj;
+    ActionMultiSelector mActionObj;
 
-    public MultiSelector(Activity activity, MultiSelectorAction actionObj, int CABMenuID)
+    public MultiSelector(Activity activity, ActionMultiSelector actionObj, int CABMenuID)
     {
         mParentActivity = activity;
         mActionObj = actionObj;
@@ -155,6 +154,8 @@ public class MultiSelector<T>
     {
         mCheckedCount = 0;
         mCABDisplayed = false;
+
+        mActionObj.clearOnce();
         for(T i : mSelectionItems.keySet())
         {
             unselectItem(i);
@@ -176,13 +177,11 @@ public class MultiSelector<T>
     {
         if(mExclusiveItems == null || mExclusiveItems.length == 0)
         {
-            //return true;
+            return true;
         }
 
         for(MultiSelector i : mExclusiveItems)
         {
-            Log.d("Breathe", "Exclusive test " + i + "  " + i.getCheckCount());
-
             if(i != this && i.getCheckCount() > 0)
             {
                 return false;
@@ -200,7 +199,6 @@ public class MultiSelector<T>
     {
         for(MultiSelector i : selectors)
         {
-            Log.d("Breathe", "Selectors Length:   " + selectors.length);
             i.mExclusiveItems = selectors;
         }
     }
