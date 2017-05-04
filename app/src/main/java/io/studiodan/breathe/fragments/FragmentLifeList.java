@@ -2,6 +2,7 @@ package io.studiodan.breathe.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.compat.BuildConfig;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -98,9 +99,13 @@ public class FragmentLifeList extends Fragment
             }
         });
 
-        mAdView = (AdView) rootView.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+
+        if(BuildConfig.BUILD_TYPE.equals("!ad_free"))
+        {
+            mAdView = (AdView) rootView.findViewById(R.id.adView);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+        }
 
         // Inflate the layout for this fragment
         return rootView;

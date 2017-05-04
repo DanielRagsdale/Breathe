@@ -11,15 +11,18 @@
     <string name="action_add_task">Add Task</string>
     <string name="action_delete">Delete</string>
 
+    <string name="action_rename">Rename</string>
+
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 
     <string name="hint_task_add">Task Name</string>
     <string name="hint_due_date">Due Date</string>
+    <string name="hint_new_list">List Name</string>
 
     <string name="prompt_new_list">New List</string>
     <string name="prompt_confirm_new_list">Add List</string>
-    <string name="hint_new_list">List Name</string>
+    <string name="prompt_confirm_rename">Rename</string>
 
     <string name="single_ToDo_id">single_ToDo_id</string>
 

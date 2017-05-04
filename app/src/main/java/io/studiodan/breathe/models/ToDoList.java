@@ -22,7 +22,6 @@ public class ToDoList implements Comparable<ToDoList>
     SortedSet<ToDoItem> items = new ConcurrentSkipListSet<>();
 
     public String localName;
-
     public String fullName;
 
     public ToDoList(String localName)
