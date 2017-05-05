@@ -33,6 +33,7 @@ public class ActivityAddTask extends AppCompatActivity implements DatePickerDial
     private Toolbar mToolbar;
     private EditText mInputName;
     private EditText mInputDate;
+    private EditText mInputDesc;
 
     private int dueYear = Integer.MAX_VALUE;
     private int dueMonth = Integer.MAX_VALUE;
@@ -48,6 +49,7 @@ public class ActivityAddTask extends AppCompatActivity implements DatePickerDial
         mListSelect = (Spinner) findViewById(R.id.spinner_list_select);
         mInputName = (EditText) findViewById(R.id.input_task_add);
         mInputDate = (EditText) findViewById(R.id.input_task_due_date);
+        mInputDesc = (EditText) findViewById(R.id.input_task_desc);
 
         mInputDate.setKeyListener(null);
 
@@ -85,30 +87,12 @@ public class ActivityAddTask extends AppCompatActivity implements DatePickerDial
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add_task)
         {
-            //Add the task
-            String itemName = mInputName.getText().toString();
-            if(!itemName.equals(""))
-            {
-                Toast.makeText(this, "Task Added", Toast.LENGTH_SHORT).show();
-
-                ToDoList list = (ToDoList) mListSelect.getSelectedItem();
-                list.add(new ToDoItem(itemName, dueYear, dueMonth, dueDay));
-            }
-
+            createTask();
             finish();
         }
         else if(id == R.id.action_add_task_no_close)
         {
-            String itemName = mInputName.getText().toString();
-            if(!itemName.equals(""))
-            {
-                Toast.makeText(this, "Task Added", Toast.LENGTH_SHORT).show();
-
-                ToDoList list = (ToDoList) mListSelect.getSelectedItem();
-                list.add(new ToDoItem(itemName, dueYear, dueMonth, dueDay));
-
-                mInputName.setText("");
-            }
+            createTask();
         }
 
         if(id == android.R.id.home)
@@ -117,6 +101,23 @@ public class ActivityAddTask extends AppCompatActivity implements DatePickerDial
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void createTask()
+    {
+
+        String itemName = mInputName.getText().toString();
+        if(!itemName.equals(""))
+        {
+
+            ToDoList list = (ToDoList) mListSelect.getSelectedItem();
+            list.add(new ToDoItem(itemName, dueYear, dueMonth, dueDay, mInputDesc.getText().toString()));
+
+            mInputName.setText("");
+            mInputDesc.setText("");
+
+            Toast.makeText(this, "Task Added", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -136,7 +137,7 @@ public class ActivityAddTask extends AppCompatActivity implements DatePickerDial
     /**
      * Show a Date Picker Dialog allowing user to specify task's due date. Invoked from layout file
      *
-     * @param v
+     * @param v view this was called from
      */
     public void showDatePickerDialog(View v)
     {
@@ -160,6 +161,20 @@ public class ActivityAddTask extends AppCompatActivity implements DatePickerDial
 
         datePicker.setArguments(fragArgs);
         datePicker.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    /**
+     * Clear the Due Date field
+     *
+     * @param v view this was called from
+     */
+    public void clearDateField(View v)
+    {
+        dueDay = Integer.MAX_VALUE;
+        dueMonth = Integer.MAX_VALUE;
+        dueYear = Integer.MAX_VALUE;
+
+        mInputDate.setText("");
     }
 
     public static class NewListFragment extends DialogFragment

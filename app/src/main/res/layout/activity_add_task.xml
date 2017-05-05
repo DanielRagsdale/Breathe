@@ -34,27 +34,55 @@
             android:hint="@string/hint_task_add" />
 
     </android.support.design.widget.TextInputLayout>
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/input_task_due_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:hint="@string/hint_task_due_date"
+                android:focusable="false"
+                android:onClick="showDatePickerDialog"/>
+
+        </android.support.design.widget.TextInputLayout>
+        <ImageButton
+            android:id="@+id/calc_clear_txt_Prise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="right|center_vertical"
+            android:onClick="clearDateField"
+            android:background="@drawable/ic_action_clear" />
+
+    </FrameLayout>
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/input_task_due_date"
+            android:id="@+id/input_task_desc"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="none"
-            android:hint="@string/hint_due_date"
-            android:focusable="false"
-            android:onClick="showDatePickerDialog"/>
-
+            android:layout_height="200dp"
+            android:inputType="textMultiLine"
+            android:hint="@string/hint_task_desc"
+            android:ems="10" />
     </android.support.design.widget.TextInputLayout>
 
     <Button
         android:text="@string/prompt_new_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="10dp"
         android:id="@+id/button_new_list"
         android:onClick="showNewListDialog"/>
 </LinearLayout>

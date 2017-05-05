@@ -17,7 +17,8 @@
     <string name="drawer_close">Close</string>
 
     <string name="hint_task_add">Task Name</string>
-    <string name="hint_due_date">Due Date</string>
+    <string name="hint_task_due_date">Due Date</string>
+    <string name="hint_task_desc">Description</string>
     <string name="hint_new_list">List Name</string>
 
     <string name="prompt_new_list">New List</string>

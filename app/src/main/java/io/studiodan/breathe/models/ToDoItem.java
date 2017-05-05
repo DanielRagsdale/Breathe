@@ -6,6 +6,7 @@ package io.studiodan.breathe.models;
 public class ToDoItem implements Comparable<ToDoItem>
 {
     public String title;
+    public String description;
     public boolean isChecked;
 
     public int dueYear = Integer.MAX_VALUE;
@@ -37,6 +38,22 @@ public class ToDoItem implements Comparable<ToDoItem>
         dueYear = dY;
         dueMonth = dM;
         dueDay = dD;
+    }
+
+    /**
+     * Create ToDoItem with given title and due date
+     *
+     * @param title title of ToDoItem
+     * @param dY due year of ToDoItem
+     * @param dM due month of ToDoItem
+     * @param dD due day of ToDoItem
+     * @param desc description of ToDoItem
+     */
+    public ToDoItem(String title, int dY, int dM, int dD, String desc)
+    {
+        this(title, dY, dM, dD);
+
+        description = desc;
     }
 
     public void setCheckedState(boolean checkedState)
