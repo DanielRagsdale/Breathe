@@ -53,7 +53,7 @@ public class ActivityInspectList extends AppCompatActivity
         ActionCheckItemSingle acis = new ActionCheckItemSingle(mList);
         ms = new MultiSelector<>(this, acis, R.menu.menu_edit_todo_list, "Editing Items");
 
-        AdapterChecklist adapter = new AdapterChecklist(mList, mBody, true, ms);
+        AdapterChecklist adapter = new AdapterChecklist(this, mList, mBody, true, ms);
         mBody.setAdapter(adapter);
         adapter.setHeightBasedOnChildren();
 

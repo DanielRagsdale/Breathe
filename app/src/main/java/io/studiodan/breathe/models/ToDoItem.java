@@ -96,6 +96,23 @@ public class ToDoItem implements Comparable<ToDoItem>
         }
     }
 
+    //TODO generalize date display format
+    /**
+     * Get a string representation of the Due Date. mm/dd/yyyy format
+     *
+     * @return string representing the due date
+     */
+    public String getDueDateString()
+    {
+        String dueDateString = "";
+        if(dueDay != Integer.MAX_VALUE && dueMonth != Integer.MAX_VALUE && dueYear != Integer.MAX_VALUE)
+        {
+            dueDateString = (dueMonth + 1) + "/" + dueDay + "/" + dueYear;
+        }
+
+        return dueDateString;
+    }
+
     @Override
     public String toString()
     {

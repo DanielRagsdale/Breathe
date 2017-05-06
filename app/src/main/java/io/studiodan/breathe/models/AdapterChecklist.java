@@ -1,39 +1,44 @@
 package io.studiodan.breathe.models;
 
+import android.app.Activity;
+import android.app.DialogFragment;
 import android.database.DataSetObserver;
 import android.graphics.Color;
-import android.graphics.Rect;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.SortedSet;
 
+import io.studiodan.breathe.ActivityInspectList;
 import io.studiodan.breathe.R;
 import io.studiodan.breathe.util.multiselector.MultiSelector;
-
-import static android.R.id.message;
 
 /**
  * Adapter representing checklist of tasks within a ToDoList
  */
 public class AdapterChecklist implements ListAdapter
 {
+    private FragmentActivity mParentAct;
+
     private ListView mParentList;
     private ToDoList mToDoList;
 
@@ -53,9 +58,9 @@ public class AdapterChecklist implements ListAdapter
      * @param dispChecked should checked items be displayed
      * @param multiSelector multiSelector used by this checklist
      */
-    public AdapterChecklist(ToDoList list, ListView pList, boolean dispChecked, MultiSelector<ToDoItem> multiSelector)
+    public AdapterChecklist(FragmentActivity parentAct, ToDoList list, ListView pList, boolean dispChecked, MultiSelector<ToDoItem> multiSelector)
     {
-        this(list, pList, multiSelector);
+        this(parentAct, list, pList, multiSelector);
 
         mDisplayChecked = dispChecked;
     }
@@ -67,8 +72,10 @@ public class AdapterChecklist implements ListAdapter
      * @param pList Listview containing the items
      * @param multiSelector multiSelector used by this checklist
      */
-    public AdapterChecklist(ToDoList list, ListView pList, MultiSelector<ToDoItem> multiSelector)
+    public AdapterChecklist(FragmentActivity parentAct, ToDoList list, ListView pList, MultiSelector<ToDoItem> multiSelector)
     {
+        mParentAct = parentAct;
+
         mParentList = pList;
         mToDoList = list;
         mMultiSelector = multiSelector;
@@ -108,14 +115,8 @@ public class AdapterChecklist implements ListAdapter
 
         checkItem.setChecked(item.isChecked);
 
-        String dueDateString = "";
-        if(item.dueDay != Integer.MAX_VALUE && item.dueMonth != Integer.MAX_VALUE && item.dueYear != Integer.MAX_VALUE)
-        {
-            dueDateString = (item.dueMonth + 1) + "/" + item.dueDay + "/" + item.dueYear;
-        }
-
         bodyText.setText(item.title);
-        dateText.setText(dueDateString);
+        dateText.setText(item.getDueDateString());
 
         checkItem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
@@ -191,6 +192,16 @@ public class AdapterChecklist implements ListAdapter
                 }
 
                 return false;
+            }
+        });
+
+        v.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                DialogFragment newList = InspectFragment.newInstance(1, item);
+                newList.show(mParentAct.getFragmentManager(), "test");
             }
         });
 
@@ -334,4 +345,99 @@ public class AdapterChecklist implements ListAdapter
         return mCheckItems.size() == 0;
     }
     //endregion
+
+
+    public static class InspectFragment extends DialogFragment
+    {
+        int mNum;
+        String mTitle;
+        String mDueDate;
+        String mDescription;
+
+        static InspectFragment newInstance(int num, ToDoItem task)
+        {
+            InspectFragment f = new InspectFragment();
+
+            // Supply num input as an argument.
+
+            Bundle args = new Bundle();
+            args.putInt("num", num);
+            args.putString("title", task.title);
+            args.putString("date", task.getDueDateString());
+            args.putString("desc", task.description);
+            f.setArguments(args);
+
+            return f;
+        }
+
+        @Override
+        public void onCreate(Bundle savedInstanceState)
+        {
+            super.onCreate(savedInstanceState);
+            Bundle args = getArguments();
+
+            mNum = args.getInt("num");
+            mTitle = args.getString("title");
+            mDescription = args.getString("desc");
+            mDueDate = args.getString("date");
+
+            // Pick a style based on the num.
+            int style = DialogFragment.STYLE_NORMAL, theme = 0;
+            switch ((mNum-1)%6)
+            {
+                case 1: style = DialogFragment.STYLE_NO_TITLE; break;
+                case 2: style = DialogFragment.STYLE_NO_FRAME; break;
+                case 3: style = DialogFragment.STYLE_NO_INPUT; break;
+                case 4: style = DialogFragment.STYLE_NORMAL; break;
+                case 5: style = DialogFragment.STYLE_NORMAL; break;
+                case 6: style = DialogFragment.STYLE_NO_TITLE; break;
+                case 7: style = DialogFragment.STYLE_NO_FRAME; break;
+                case 8: style = DialogFragment.STYLE_NORMAL; break;
+            }
+            switch ((mNum-1)%6)
+            {
+                case 4: theme = android.R.style.Theme_Holo; break;
+                case 5: theme = android.R.style.Theme_Holo_Light_Dialog; break;
+                case 6: theme = android.R.style.Theme_Holo_Light; break;
+                case 7: theme = android.R.style.Theme_Holo_Light_Panel; break;
+                case 8: theme = android.R.style.Theme_Holo_Light; break;
+            }
+            setStyle(style, theme);
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        {
+            View v = inflater.inflate(R.layout.dialog_inspect_task, container, false);
+
+            TextView title = (TextView) v.findViewById(R.id.tv_title);
+            title.setText(mTitle);
+
+            TextView description = (TextView) v.findViewById(R.id.tv_task_desc);
+            description.setText(mDescription);
+
+            TextView dueDate = (TextView) v.findViewById(R.id.tv_date);
+            dueDate.setText(mDueDate);
+
+            return v;
+        }
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

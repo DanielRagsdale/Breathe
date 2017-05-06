@@ -103,23 +103,6 @@ public class ActivityAddTask extends AppCompatActivity implements DatePickerDial
         return super.onOptionsItemSelected(item);
     }
 
-    private void createTask()
-    {
-
-        String itemName = mInputName.getText().toString();
-        if(!itemName.equals(""))
-        {
-
-            ToDoList list = (ToDoList) mListSelect.getSelectedItem();
-            list.add(new ToDoItem(itemName, dueYear, dueMonth, dueDay, mInputDesc.getText().toString()));
-
-            mInputName.setText("");
-            mInputDesc.setText("");
-
-            Toast.makeText(this, "Task Added", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     /**
      * Show a Dialog allowing user to create a new ToDoList. Invoked from layout file
      *
@@ -269,7 +252,7 @@ public class ActivityAddTask extends AppCompatActivity implements DatePickerDial
         mInputDate.setText((month + 1) + "/" + day + "/" + year);
     }
 
-    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener
+    public static class DatePickerFragment extends DialogFragment
     {
 
         @Override
@@ -287,10 +270,21 @@ public class ActivityAddTask extends AppCompatActivity implements DatePickerDial
             // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(getActivity(), (ActivityAddTask)getActivity(), year, month, day);
         }
+    }
 
-        public void onDateSet(DatePicker view, int year, int month, int day)
+    private void createTask()
+    {
+        String itemName = mInputName.getText().toString();
+        if(!itemName.equals(""))
         {
-            // Do something with the date chosen by the user
+
+            ToDoList list = (ToDoList) mListSelect.getSelectedItem();
+            list.add(new ToDoItem(itemName, dueYear, dueMonth, dueDay, mInputDesc.getText().toString()));
+
+            mInputName.setText("");
+            mInputDesc.setText("");
+
+            Toast.makeText(this, "Task Added", Toast.LENGTH_SHORT).show();
         }
     }
 }

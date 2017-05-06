@@ -65,7 +65,7 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
             mListSelector.registerItem(mList);
 
             mTitleTextView.setText(mList.fullName);
-            mBodyListView.setAdapter(new AdapterChecklist(mList, mBodyListView, mItemSelector));
+            mBodyListView.setAdapter(new AdapterChecklist(mParentFrag.getActivity(), mList, mBodyListView, mItemSelector));
             ((AdapterChecklist) mBodyListView.getAdapter()).setHeightBasedOnChildren();
 
             setVisualClickState(mListSelector.getSelectState(mList));
