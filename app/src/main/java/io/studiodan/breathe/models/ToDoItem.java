@@ -1,5 +1,7 @@
 package io.studiodan.breathe.models;
 
+import java.util.Calendar;
+
 /**
  * Class representing a single task on a To Do list
  */
@@ -9,9 +11,7 @@ public class ToDoItem implements Comparable<ToDoItem>
     public String description;
     public boolean isChecked;
 
-    public int dueYear = Integer.MAX_VALUE;
-    public int dueMonth = Integer.MAX_VALUE;
-    public int dueDay = Integer.MAX_VALUE;
+    Calendar dueDate;
 
     /**
      * Create ToDoItem with given title
@@ -35,9 +35,8 @@ public class ToDoItem implements Comparable<ToDoItem>
     {
        this(title);
 
-        dueYear = dY;
-        dueMonth = dM;
-        dueDay = dD;
+        dueDate = Calendar.getInstance();
+        dueDate.set(dY, dM, dD);
     }
 
     /**
@@ -73,22 +72,13 @@ public class ToDoItem implements Comparable<ToDoItem>
     {
         if(isChecked == o.isChecked)
         {
-            int yearDif = dueYear - o.dueYear;
-            if(yearDif == 0)
+            int dateComp = dueDate.compareTo(o.dueDate);
+            if(dateComp == 0)
             {
-                int monthDif = dueMonth - o.dueMonth;
-                if(monthDif == 0)
-                {
-                    int dayDiff = dueDay - o.dueDay;
-                    if(dayDiff == 0)
-                    {
-                        return title.compareTo(o.title);
-                    }
-                    return dayDiff;
-                }
-                return monthDif;
+                return title.compareTo(o.title);
             }
-            return yearDif;
+
+            return dateComp;
         }
         else
         {
@@ -105,9 +95,9 @@ public class ToDoItem implements Comparable<ToDoItem>
     public String getDueDateString()
     {
         String dueDateString = "";
-        if(dueDay != Integer.MAX_VALUE && dueMonth != Integer.MAX_VALUE && dueYear != Integer.MAX_VALUE)
+        if(dueDate != null)
         {
-            dueDateString = (dueMonth + 1) + "/" + dueDay + "/" + dueYear;
+            dueDateString = (dueDate.get(dueDate.MONTH) + 1) + "/" + dueDate.get(dueDate.DAY_OF_MONTH) + "/" + dueDate.get(dueDate.YEAR);
         }
 
         return dueDateString;

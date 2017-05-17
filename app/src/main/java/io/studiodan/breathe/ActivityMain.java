@@ -11,13 +11,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
 import io.studiodan.breathe.fragments.FragmentDrawer;
 import io.studiodan.breathe.fragments.FragmentLifeList;
 import io.studiodan.breathe.fragments.OneFragment;
-import io.studiodan.breathe.fragments.ThreeFragment;
+import io.studiodan.breathe.fragments.FragmentRoutines;
 
 /**
  * Master activity holding fragments for individual panes.
@@ -99,7 +96,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentDrawer.Fr
                 title = getString(R.string.title_ToDo);
                 break;
             case 2:
-                fragment = new ThreeFragment();
+                fragment = new FragmentRoutines();
                 title = getString(R.string.title_routines);
                 break;
             default:
