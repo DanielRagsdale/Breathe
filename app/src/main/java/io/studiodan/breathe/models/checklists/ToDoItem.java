@@ -1,4 +1,4 @@
-package io.studiodan.breathe.models;
+package io.studiodan.breathe.models.checklists;
 
 import java.util.Calendar;
 

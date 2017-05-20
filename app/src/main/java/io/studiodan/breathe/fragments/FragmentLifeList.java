@@ -7,7 +7,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +15,13 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
 
-import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileOutputStream;
 
 import io.studiodan.breathe.ActivityAddTask;
 import io.studiodan.breathe.R;
-import io.studiodan.breathe.models.AdapterToDo;
-import io.studiodan.breathe.models.ToDoList;
+import io.studiodan.breathe.models.checklists.AdapterToDo;
+import io.studiodan.breathe.models.checklists.ToDoList;
 import io.studiodan.breathe.util.UtilFile;
 
 /**
@@ -54,17 +51,11 @@ public class FragmentLifeList extends Fragment
         //Load the serialized to do lists
         try
         {
-
-//            Log.v("Breathe", "********** File Read ***********" + mFilePath);
-
             String data = UtilFile.getStringFromFile(mFilePath);
-            JSONObject jsonData = new JSONObject(data);
-
             topList = new Gson().fromJson(data, ToDoList.class);
         }
         catch(Exception e)
         {
-            //Log.d("Breathe", e.toString() + "   while loading To-Do lists");
             e.printStackTrace();
         }
     }
@@ -123,7 +114,7 @@ public class FragmentLifeList extends Fragment
         if(mRecyclerView != null)
         {
             // specify an adapter (see also next example)
-            mAdapter = new AdapterToDo(topList, this);
+            mAdapter = new AdapterToDo(topList, getActivity());
             mRecyclerView.setAdapter(mAdapter);
         }
     }

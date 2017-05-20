@@ -1,6 +1,4 @@
-package io.studiodan.breathe.models;
-
-import android.util.Log;
+package io.studiodan.breathe.models.checklists;
 
 import java.util.Iterator;
 import java.util.SortedSet;

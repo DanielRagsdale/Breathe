@@ -1,5 +1,6 @@
-package io.studiodan.breathe.models;
+package io.studiodan.breathe.models.checklists;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
@@ -20,7 +21,7 @@ import io.studiodan.breathe.util.multiselector.MultiSelector;
 public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
 {
     public ToDoList mDataset;
-    private FragmentLifeList mParentFrag;
+    private Activity mParentAct;
 
     MultiSelector<ToDoList> mListSelector;
     MultiSelector<ToDoItem> mItemSelector;
@@ -32,7 +33,6 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
     {
         ToDoList mList;
 
-        // each data item is just a string in this case
         public CardView mCardView;
         public TextView mTitleTextView;
         public ListView mBodyListView;
@@ -65,7 +65,7 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
             mListSelector.registerItem(mList);
 
             mTitleTextView.setText(mList.fullName);
-            mBodyListView.setAdapter(new AdapterChecklist(mParentFrag.getActivity(), mList, mBodyListView, mItemSelector));
+            mBodyListView.setAdapter(new AdapterChecklist(mParentAct, mList, mBodyListView, mItemSelector));
             ((AdapterChecklist) mBodyListView.getAdapter()).setHeightBasedOnChildren();
 
             setVisualClickState(mListSelector.getSelectState(mList));
@@ -76,9 +76,9 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
         {
             int pos = mDataset.getPositionOfList(mList);
 
-            Intent intent = new Intent(mParentFrag.getActivity(), ActivityInspectList.class);
-            intent.putExtra(mParentFrag.getString(R.string.single_ToDo_id), pos);
-            mParentFrag.getActivity().startActivity(intent);
+            Intent intent = new Intent(mParentAct, ActivityInspectList.class);
+            intent.putExtra(mParentAct.getString(R.string.single_ToDo_id), pos);
+            mParentAct.startActivity(intent);
         }
 
         @Override
@@ -108,17 +108,17 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public AdapterToDo(ToDoList lists, FragmentLifeList parentFrag)
+    public AdapterToDo(ToDoList lists, Activity parentAct)
     {
         mDataset = lists;
-        mParentFrag = parentFrag;
+        mParentAct = parentAct;
 
         ActionToDo atd = new ActionToDo(this);
-        mListSelector = new MultiSelector<>(mParentFrag.getActivity(), atd, R.menu.menu_edit_todo_list, "Editing Lists");
+        mListSelector = new MultiSelector<>(mParentAct, atd, R.menu.menu_edit_todo_list, "Editing Lists");
         atd.setMultiSelector(mListSelector);
 
         ActionCheckItemMulti acim = new ActionCheckItemMulti(this);
-        mItemSelector = new MultiSelector<>(mParentFrag.getActivity(), acim, R.menu.menu_edit_todo_item, "Editing Items");
+        mItemSelector = new MultiSelector<>(mParentAct, acim, R.menu.menu_edit_todo_item, "Editing Items");
         acim.setMultiSelector(mItemSelector);
 
         MultiSelector.createExclusivity(mListSelector, mItemSelector);
@@ -148,7 +148,7 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
 
     // Create new views (invoked by the layout manager)
     @Override
-    public AdapterToDo.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType)
+    public AdapterToDo.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         // create a new view
         CardView v = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_to_do_list, parent, false);
@@ -176,7 +176,13 @@ public class AdapterToDo extends RecyclerView.Adapter<AdapterToDo.ViewHolder>
         holder.setListRepresentation(nList);
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+    /**
+     * Return the size of the dataset (invoked by the layout manager)
+     * One is added to the bottom to allow overscrolling. Prevents
+     * Ads/ FAB from obscuring the lists
+     *
+     * @return the number of items
+     */
     @Override
     public int getItemCount()
     {

@@ -5,7 +5,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,9 +16,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import io.studiodan.breathe.fragments.FragmentLifeList;
-import io.studiodan.breathe.models.AdapterChecklist;
-import io.studiodan.breathe.models.ToDoItem;
-import io.studiodan.breathe.models.ToDoList;
+import io.studiodan.breathe.models.checklists.AdapterChecklist;
+import io.studiodan.breathe.models.checklists.ToDoItem;
+import io.studiodan.breathe.models.checklists.ToDoList;
 import io.studiodan.breathe.util.multiselector.ActionCheckItemSingle;
 import io.studiodan.breathe.util.multiselector.MultiSelector;
 

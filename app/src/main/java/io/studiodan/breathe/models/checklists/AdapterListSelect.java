@@ -1,4 +1,4 @@
-package io.studiodan.breathe.models;
+package io.studiodan.breathe.models.checklists;
 
 import android.database.DataSetObserver;
 import android.util.TypedValue;
@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-
-import io.studiodan.breathe.models.ToDoList;
 
 public class AdapterListSelect implements SpinnerAdapter
 {

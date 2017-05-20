@@ -4,9 +4,12 @@ package io.studiodan.breathe.models.routines;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * An item that repeats at specified intervals
@@ -25,26 +28,22 @@ import java.util.Calendar;
 public class RoutineElement
 {
     String mTitle;
-
-    ArrayList<RoutineTimer> mTimers;
+    List<RoutineTimer> mTimers;
 
     /**
      * Create a new basic routine element with given title
      *
      * @param title the title of this routine
      */
-    public RoutineElement(String title)
+    public RoutineElement(String title, RoutineTimer... timers)
     {
-        this();
+        this(timers);
         mTitle = title;
     }
 
-    protected RoutineElement()
+    protected RoutineElement(RoutineTimer... timers)
     {
-        mTimers = new ArrayList<>();
-
-        //TODO make this make sense
-        mTimers.add(new DummyRoutineElement());
+        mTimers = Arrays.asList(timers);
     }
 
     /**
@@ -53,9 +52,64 @@ public class RoutineElement
      * @param day the day where the routine is examined
      * @return
      */
-    public RoutineInstance[] getInstancesForDay(Calendar day)
+    public List<RoutineInstance> getInstancesForDay(Calendar day)
     {
-        return null;
+        ArrayList<RoutineInstance> ri = new ArrayList<>();
+
+        for(RoutineTimer t : mTimers)
+        {
+            for(TimePeriod p : t.getPeriodsOnDay(Calendar.getInstance()))
+            {
+                ri.add(new RoutineElement.Instance(p, mTitle));
+            }
+        }
+
+        return ri;
+    }
+
+    /**
+     * Instance for the most basic type of RoutineElement
+     */
+    public class Instance implements  RoutineInstance
+    {
+        TimePeriod mTimePeriod;
+        String mName;
+
+        public Instance(TimePeriod period, String name)
+        {
+            mTimePeriod = period;
+            mName = name;
+        }
+
+        @Override
+        public TimePeriod getTimePeriod()
+        {
+            return mTimePeriod;
+        }
+
+        @Override
+        public String getName()
+        {
+            return mName;
+        }
+
+        @Override
+        public View createTimelineView(LayoutInflater inflater, ViewGroup container)
+        {
+            TextView tv = new TextView(container.getContext());
+            tv.setText(mName);
+
+            return tv;
+        }
+
+        @Override
+        public View createScheduleView(LayoutInflater inflater, ViewGroup container)
+        {
+            TextView tv = new TextView(container.getContext());
+            tv.setText(mName);
+
+            return tv;
+        }
     }
 }
 

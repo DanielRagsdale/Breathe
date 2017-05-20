@@ -10,6 +10,20 @@ import android.view.ViewGroup;
 public interface RoutineInstance
 {
     /**
+     * Return the TimePeriod that this routine spans
+     *
+     * @return the TimePeriod of this routine
+     */
+    TimePeriod getTimePeriod();
+
+    /**
+     * Return the name of this routine
+     *
+     * @return the name of this routine
+     */
+    String getName();
+
+    /**
      * View representation when seen in timeline (list) view
      *
      * @param inflater Layout inflater used to create view representation

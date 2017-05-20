@@ -1,6 +1,7 @@
 package io.studiodan.breathe.util.multiselector;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.ActionMode;
 
 import java.util.ArrayList;

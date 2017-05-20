@@ -1,4 +1,4 @@
-package io.studiodan.breathe.models;
+package io.studiodan.breathe.models.checklists;
 
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -7,28 +7,22 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.SortedSet;
 
-import io.studiodan.breathe.ActivityInspectList;
 import io.studiodan.breathe.R;
 import io.studiodan.breathe.util.multiselector.MultiSelector;
 
@@ -37,7 +31,7 @@ import io.studiodan.breathe.util.multiselector.MultiSelector;
  */
 public class AdapterChecklist implements ListAdapter
 {
-    private FragmentActivity mParentAct;
+    private Activity mParentAct;
 
     private ListView mParentList;
     private ToDoList mToDoList;
@@ -58,7 +52,7 @@ public class AdapterChecklist implements ListAdapter
      * @param dispChecked should checked items be displayed
      * @param multiSelector multiSelector used by this checklist
      */
-    public AdapterChecklist(FragmentActivity parentAct, ToDoList list, ListView pList, boolean dispChecked, MultiSelector<ToDoItem> multiSelector)
+    public AdapterChecklist(Activity parentAct, ToDoList list, ListView pList, boolean dispChecked, MultiSelector<ToDoItem> multiSelector)
     {
         this(parentAct, list, pList, multiSelector);
 
@@ -72,7 +66,7 @@ public class AdapterChecklist implements ListAdapter
      * @param pList Listview containing the items
      * @param multiSelector multiSelector used by this checklist
      */
-    public AdapterChecklist(FragmentActivity parentAct, ToDoList list, ListView pList, MultiSelector<ToDoItem> multiSelector)
+    public AdapterChecklist(Activity parentAct, ToDoList list, ListView pList, MultiSelector<ToDoItem> multiSelector)
     {
         mParentAct = parentAct;
 

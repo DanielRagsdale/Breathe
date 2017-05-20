@@ -18,9 +18,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import io.studiodan.breathe.models.AdapterListSelect;
-import io.studiodan.breathe.models.ToDoItem;
-import io.studiodan.breathe.models.ToDoList;
+import io.studiodan.breathe.models.checklists.AdapterListSelect;
+import io.studiodan.breathe.models.checklists.ToDoItem;
+import io.studiodan.breathe.models.checklists.ToDoList;
 import io.studiodan.breathe.fragments.FragmentLifeList;
 
 /**

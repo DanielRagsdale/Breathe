@@ -1,8 +1,8 @@
 package io.studiodan.breathe.util.multiselector;
 
 import io.studiodan.breathe.R;
-import io.studiodan.breathe.models.AdapterToDo;
-import io.studiodan.breathe.models.ToDoItem;
+import io.studiodan.breathe.models.checklists.AdapterToDo;
+import io.studiodan.breathe.models.checklists.ToDoItem;
 
 /**
  * Created by dan on 5/2/17.
