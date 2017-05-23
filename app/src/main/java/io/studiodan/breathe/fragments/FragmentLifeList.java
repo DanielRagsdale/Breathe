@@ -76,7 +76,6 @@ public class FragmentLifeList extends Fragment
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-
         mFABAdd = (FloatingActionButton) rootView.findViewById(R.id.fab_add_todo);
         mFABAdd.setOnClickListener(new View.OnClickListener()
         {

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 
 import io.studiodan.breathe.R;
@@ -47,8 +48,17 @@ public class AdapterTimeline extends RecyclerView.Adapter<AdapterTimeline.ViewHo
         }
     }
 
+    /**
+     * Create a new AdapterTimeline.
+     * The parameter "data" is sorted during the constructor
+     *
+     * @param data the list of RoutineInstances
+     * @param parentAct The activity that holds the RecyclerView associated with this adapter
+     */
     public AdapterTimeline(List<RoutineInstance> data, Activity parentAct)
     {
+        Collections.sort(data, new CompartorRoutineInstance());
+
         mDataset = data;
         mParentAct = parentAct;
     }

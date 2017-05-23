@@ -1,6 +1,8 @@
 package io.studiodan.breathe.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import io.studiodan.breathe.ActivityAddRoutine;
+import io.studiodan.breathe.ActivityAddTask;
 import io.studiodan.breathe.BuildConfig;
 import io.studiodan.breathe.R;
 import io.studiodan.breathe.models.routines.AdapterTimeline;
@@ -34,6 +38,8 @@ public class FragmentRoutines extends Fragment
     private RecyclerView mRecyclerView;
     private AdapterTimeline mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+
+    private FloatingActionButton mFABAdd;
 
     private String mFilePath;
 
@@ -76,6 +82,19 @@ public class FragmentRoutines extends Fragment
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        mFABAdd = (FloatingActionButton) rootView.findViewById(R.id.fab_add_todo);
+        mFABAdd.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                //Transition to add screen
+                Intent intent = new Intent(getActivity(), ActivityAddRoutine.class);
+                getActivity().startActivity(intent);
+            }
+        });
+
+
         if(!BuildConfig.BUILD_TYPE.equals("ad_free"))
         {
             mAdView = (AdView) rootView.findViewById(R.id.adView);
@@ -100,14 +119,9 @@ public class FragmentRoutines extends Fragment
             // specify an adapter (see also next example)
             List<RoutineInstance> tempL = new ArrayList<RoutineInstance>();
 
-            int i = 0;
-
             for(RoutineElement re : mRoutines)
             {
                 tempL.addAll(re.getInstancesForDay(Calendar.getInstance()));
-                Log.d("Breathe", "Items added to list" + i);
-
-                i++;
             }
 
             mAdapter = new AdapterTimeline(tempL, getActivity());

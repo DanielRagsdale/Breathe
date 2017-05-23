@@ -2,6 +2,7 @@
     <string name="app_name">Breathe</string>
     <string name="add_task_name">Add Task</string>
     <string name="inspect_list_name">Inspect List</string>
+    <string name="add_routine_name">Add Routine</string>
 
     <!--<string name="banner_ad_unit_id">ca-app-pub-7505789712816546/1819043717</string>-->
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>

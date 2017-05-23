@@ -27,6 +27,10 @@
             android:name=".ActivityInspectList"
             android:label="@string/inspect_list_name">
         </activity>
+        <activity
+            android:name=".ActivityAddRoutine"
+            android:label="@string/add_routine_name">
+        </activity>
     </application>
 
 </manifest>

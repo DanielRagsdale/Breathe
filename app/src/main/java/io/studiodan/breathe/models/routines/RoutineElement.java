@@ -1,9 +1,14 @@
 package io.studiodan.breathe.models.routines;
 
 
+import android.app.ActionBar;
+import android.content.res.Resources;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -96,7 +101,14 @@ public class RoutineElement
         @Override
         public View createTimelineView(LayoutInflater inflater, ViewGroup container)
         {
+            Resources r = container.getContext().getResources();
+            int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, r.getDisplayMetrics());
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(px, px, px, px);
+
             TextView tv = new TextView(container.getContext());
+            tv.setLayoutParams(params);
             tv.setText(mName);
 
             return tv;
@@ -105,7 +117,14 @@ public class RoutineElement
         @Override
         public View createScheduleView(LayoutInflater inflater, ViewGroup container)
         {
+            Resources r = container.getContext().getResources();
+            int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, r.getDisplayMetrics());
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(px, px, px, px);
+
             TextView tv = new TextView(container.getContext());
+            tv.setLayoutParams(params);
             tv.setText(mName);
 
             return tv;
