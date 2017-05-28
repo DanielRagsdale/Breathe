@@ -33,10 +33,13 @@ public class ToDoItem implements Comparable<ToDoItem>
      */
     public ToDoItem(String title, int dY, int dM, int dD)
     {
-       this(title);
+        this(title);
 
-        dueDate = Calendar.getInstance();
-        dueDate.set(dY, dM, dD);
+        if(dY != Integer.MAX_VALUE && dM != Integer.MAX_VALUE && dD != Integer.MAX_VALUE)
+        {
+            dueDate = Calendar.getInstance();
+            dueDate.set(dY, dM, dD);
+        }
     }
 
     /**
@@ -51,7 +54,6 @@ public class ToDoItem implements Comparable<ToDoItem>
     public ToDoItem(String title, int dY, int dM, int dD, String desc)
     {
         this(title, dY, dM, dD);
-
         description = desc;
     }
 
