@@ -24,6 +24,10 @@ public class AdapterListSelect implements SpinnerAdapter
 
         TextView tv = new TextView(parent.getContext());
 
+        float scale = parent.getResources().getDisplayMetrics().density;
+        int four_dp = (int)(4*scale + 0.5f);
+        tv.setPadding(four_dp, four_dp, four_dp, four_dp);
+
         String displayName = list.fullName;
         if(displayName.length() > 24)
         {
@@ -42,6 +46,10 @@ public class AdapterListSelect implements SpinnerAdapter
         ToDoList list = topList.getListAtPos(position);
 
         TextView tv = new TextView(parent.getContext());
+
+        float scale = parent.getResources().getDisplayMetrics().density;
+        int four_dp = (int)(4*scale + 0.5f);
+        tv.setPadding(four_dp, four_dp, four_dp, four_dp);
 
         String displayName = list.fullName;
         if(displayName.length() > 50)

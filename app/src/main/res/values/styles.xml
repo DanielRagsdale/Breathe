@@ -8,4 +8,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    
+    <style name="SeekBarHiddenSteps" parent="Base.Widget.AppCompat.SeekBar.Discrete">
+        <item name="tickMark">@null</item>
+    </style>
 </resources>

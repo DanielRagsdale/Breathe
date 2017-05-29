@@ -73,7 +73,6 @@ public class ActivityInspectList extends AppCompatActivity
         }
 
         getSupportActionBar().setTitle(dispName);
-
         mTitle.setText(mList.localName);
     }
 

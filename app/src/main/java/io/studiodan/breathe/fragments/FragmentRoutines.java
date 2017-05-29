@@ -6,7 +6,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +21,10 @@ import java.util.Calendar;
 import java.util.List;
 
 import io.studiodan.breathe.ActivityAddRoutine;
-import io.studiodan.breathe.ActivityAddTask;
 import io.studiodan.breathe.BuildConfig;
 import io.studiodan.breathe.R;
 import io.studiodan.breathe.models.routines.AdapterTimeline;
-import io.studiodan.breathe.models.routines.DummyRoutineTimer;
+import io.studiodan.breathe.models.routines.TimerMonthlyDate;
 import io.studiodan.breathe.models.routines.RoutineElement;
 import io.studiodan.breathe.models.routines.RoutineInstance;
 import io.studiodan.breathe.util.UtilFile;
@@ -67,9 +65,9 @@ public class FragmentRoutines extends Fragment
 
         //TODO Create actual system for creating routines
         mRoutines = new ArrayList<>();
-        mRoutines.add(new RoutineElement("Test item 0", new DummyRoutineTimer(3*60)));
-        mRoutines.add(new RoutineElement("Test item 1", new DummyRoutineTimer(33), new DummyRoutineTimer(10*60 + 45)));
-        mRoutines.add(new RoutineElement("Test item 2", new DummyRoutineTimer(17*60 + 5)));
+        mRoutines.add(new RoutineElement("Test item 0", new TimerMonthlyDate(3*60)));
+        mRoutines.add(new RoutineElement("Test item 1", new TimerMonthlyDate(33), new TimerMonthlyDate(10*60 + 45)));
+        mRoutines.add(new RoutineElement("Test item 2", new TimerMonthlyDate(17*60 + 5)));
     }
 
     @Override

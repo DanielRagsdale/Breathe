@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:text="Day of Week Timer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:layout_margin="12dp"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <TextView
+                android:text="M"
+                android:textAlignment="center"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:id="@+id/cb_day_0"
+                android:button="@null"
+                android:background="?android:attr/listChoiceIndicatorMultiple"
+                android:layout_width="@dimen/large_checkbox"
+                android:layout_height="@dimen/large_checkbox"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <TextView
+                android:text="Tu"
+                android:textAlignment="center"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:id="@+id/cb_day_1"
+				android:button="@null"
+				android:background="?android:attr/listChoiceIndicatorMultiple"
+                android:layout_width="@dimen/large_checkbox"
+                android:layout_height="@dimen/large_checkbox"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <TextView
+                android:text="W"
+                android:textAlignment="center"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:id="@+id/cb_day_2"
+				android:button="@null"
+				android:background="?android:attr/listChoiceIndicatorMultiple"
+                android:layout_width="@dimen/large_checkbox"
+                android:layout_height="@dimen/large_checkbox"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <TextView
+                android:text="Th"
+                android:textAlignment="center"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:id="@+id/cb_day_3"
+				android:button="@null"
+				android:background="?android:attr/listChoiceIndicatorMultiple"
+                android:layout_width="@dimen/large_checkbox"
+                android:layout_height="@dimen/large_checkbox"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <TextView
+                android:text="F"
+                android:textAlignment="center"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:id="@+id/cb_day_4"
+				android:button="@null"
+				android:background="?android:attr/listChoiceIndicatorMultiple"
+                android:layout_width="@dimen/large_checkbox"
+                android:layout_height="@dimen/large_checkbox"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <TextView
+                android:text="Sa"
+                android:textAlignment="center"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:id="@+id/cb_day_5"
+				android:button="@null"
+				android:background="?android:attr/listChoiceIndicatorMultiple"
+                android:layout_width="@dimen/large_checkbox"
+                android:layout_height="@dimen/large_checkbox"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <TextView
+                android:text="Su"
+                android:textAlignment="center"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:id="@+id/cb_day_6"
+				android:button="@null"
+				android:background="?android:attr/listChoiceIndicatorMultiple"
+                android:layout_width="@dimen/large_checkbox"
+                android:layout_height="@dimen/large_checkbox"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:text="Start Time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="16dp"
+        android:layout_margin="12dp"/>
+
+    <TextView
+        android:text="Duration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="16dp"
+        android:layout_margin="12dp"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <SeekBar
+            style="@style/SeekBarHiddenSteps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:max="80"
+            android:progress="12"
+            android:id="@+id/sb_duration"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:text="24:00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:textSize="20sp"
+            android:id="@+id/tv_duration"/>
+    </LinearLayout>
+
+    <Button
+        android:text="Add Timer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_confirm_new_timer"/>
+
+</LinearLayout>

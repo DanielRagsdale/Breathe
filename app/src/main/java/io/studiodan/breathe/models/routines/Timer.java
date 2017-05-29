@@ -15,19 +15,20 @@ import java.util.Calendar;
  *
  * Times:
  *      Any time range can be specified for a routine
- *      Different time ranges can be specified for the different days
- *          that an event occurs (e.g. Monday at 1:00PM, Friday at 3:00PM)
+ *      Different time ranges can be specified by using multiple of the same kind of timer
  *
  */
-public abstract class RoutineTimer
+public abstract class Timer
 {
+    public static ETimers mType;
+
     /**
-     * Get an array of TimePeriods representing when this routine is scheduled
+     * Get a TimePeriods representing when this routine is scheduled
      *
-     * @param day what day to get TimePeriods for
-     * @return the array of TimePeriods
+     * @param day what day to get TimePeriod for
+     * @return the TimePeriods
      */
-    public abstract TimePeriod[] getPeriodsOnDay(Calendar day);
+    public abstract TimePeriod getPeriodOnDay(Calendar day);
 
     /**
      * Does the routine element occur on the given day

@@ -1,9 +1,7 @@
 package io.studiodan.breathe.models.routines;
 
 
-import android.app.ActionBar;
 import android.content.res.Resources;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,20 +31,20 @@ import java.util.List;
 public class RoutineElement
 {
     String mTitle;
-    List<RoutineTimer> mTimers;
+    List<Timer> mTimers;
 
     /**
      * Create a new basic routine element with given title
      *
      * @param title the title of this routine
      */
-    public RoutineElement(String title, RoutineTimer... timers)
+    public RoutineElement(String title, Timer... timers)
     {
         this(timers);
         mTitle = title;
     }
 
-    protected RoutineElement(RoutineTimer... timers)
+    protected RoutineElement(Timer... timers)
     {
         mTimers = Arrays.asList(timers);
     }
@@ -61,14 +59,10 @@ public class RoutineElement
     {
         ArrayList<RoutineInstance> ri = new ArrayList<>();
 
-        for(RoutineTimer t : mTimers)
+        for(Timer t : mTimers)
         {
-            for(TimePeriod p : t.getPeriodsOnDay(Calendar.getInstance()))
-            {
-                ri.add(new RoutineElement.Instance(p, mTitle));
-            }
+            ri.add(new RoutineElement.Instance(t.getPeriodOnDay(Calendar.getInstance()), mTitle));
         }
-
         return ri;
     }
 

@@ -28,9 +28,9 @@ import io.studiodan.breathe.fragments.FragmentLifeList;
  */
 public class ActivityAddTask extends AppCompatActivity implements DatePickerDialog.OnDateSetListener
 {
+    private Toolbar mToolbar;
     protected static Spinner mListSelect;
 
-    private Toolbar mToolbar;
     private EditText mInputName;
     private EditText mInputDate;
     private EditText mInputDesc;
@@ -47,14 +47,15 @@ public class ActivityAddTask extends AppCompatActivity implements DatePickerDial
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mListSelect = (Spinner) findViewById(R.id.spinner_list_select);
+
+        AdapterListSelect adapter = new AdapterListSelect(FragmentLifeList.topList);
+        mListSelect.setAdapter(adapter);
+
         mInputName = (EditText) findViewById(R.id.input_task_add);
         mInputDate = (EditText) findViewById(R.id.input_task_due_date);
         mInputDesc = (EditText) findViewById(R.id.input_task_desc);
 
         mInputDate.setKeyListener(null);
-
-        AdapterListSelect adapter = new AdapterListSelect(FragmentLifeList.topList);
-        mListSelect.setAdapter(adapter);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("");
@@ -72,7 +73,7 @@ public class ActivityAddTask extends AppCompatActivity implements DatePickerDial
     public boolean onCreateOptionsMenu(Menu menu)
     {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_task, menu);
+        getMenuInflater().inflate(R.menu.menu_add_item, menu);
         return true;
     }
 
@@ -160,6 +161,32 @@ public class ActivityAddTask extends AppCompatActivity implements DatePickerDial
         mInputDate.setText("");
     }
 
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int day)
+    {
+        dueYear = year;
+        dueMonth = month;
+        dueDay = day;
+
+        mInputDate.setText((month + 1) + "/" + day + "/" + year);
+    }
+
+    private void createTask()
+    {
+        String itemName = mInputName.getText().toString();
+        if(!itemName.equals(""))
+        {
+
+            ToDoList list = (ToDoList) mListSelect.getSelectedItem();
+            list.add(new ToDoItem(itemName, dueYear, dueMonth, dueDay, mInputDesc.getText().toString()));
+
+            mInputName.setText("");
+            mInputDesc.setText("");
+
+            Toast.makeText(this, "Task Added", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public static class NewListFragment extends DialogFragment
     {
         int mNum;
@@ -218,38 +245,28 @@ public class ActivityAddTask extends AppCompatActivity implements DatePickerDial
 
             Button confirm = (Button) v.findViewById(R.id.button_confirm_new_list);
             confirm.setOnClickListener(new View.OnClickListener() { @Override
-                public void onClick(View v)
+            public void onClick(View v)
+            {
+                String name = listName.getText().toString();
+                if(!name.equals(""))
                 {
-                    String name = listName.getText().toString();
-                    if(!name.equals(""))
-                    {
-                        ToDoList list = FragmentLifeList.topList;
-                        ToDoList activeList = list.getListAtPos(mListVal);
+                    ToDoList list = FragmentLifeList.topList;
+                    ToDoList activeList = list.getListAtPos(mListVal);
 
-                        ToDoList newList = new ToDoList(name);
-                        activeList.add(newList);
+                    ToDoList newList = new ToDoList(name);
+                    activeList.add(newList);
 
-                        //mListSelect.getAdapter().g
-                        int pos = list.getPositionOfList(newList);
-                        mListSelect.setSelection(pos);
+                    //mListSelect.getAdapter().g
+                    int pos = list.getPositionOfList(newList);
+                    mListSelect.setSelection(pos);
 
-                        NewListFragment.this.dismiss();
-                    }
+                    NewListFragment.this.dismiss();
                 }
+            }
             });
 
             return v;
         }
-    }
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int day)
-    {
-        dueYear = year;
-        dueMonth = month;
-        dueDay = day;
-
-        mInputDate.setText((month + 1) + "/" + day + "/" + year);
     }
 
     public static class DatePickerFragment extends DialogFragment
@@ -269,22 +286,6 @@ public class ActivityAddTask extends AppCompatActivity implements DatePickerDial
 
             // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(getActivity(), (ActivityAddTask)getActivity(), year, month, day);
-        }
-    }
-
-    private void createTask()
-    {
-        String itemName = mInputName.getText().toString();
-        if(!itemName.equals(""))
-        {
-
-            ToDoList list = (ToDoList) mListSelect.getSelectedItem();
-            list.add(new ToDoItem(itemName, dueYear, dueMonth, dueDay, mInputDesc.getText().toString()));
-
-            mInputName.setText("");
-            mInputDesc.setText("");
-
-            Toast.makeText(this, "Task Added", Toast.LENGTH_SHORT).show();
         }
     }
 }
