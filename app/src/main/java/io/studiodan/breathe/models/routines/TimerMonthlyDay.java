@@ -3,9 +3,9 @@ package io.studiodan.breathe.models.routines;
 import java.util.Calendar;
 
 /**
- * Dummy Timer. Used for testing and to help development
+ * Dummy ITimer. Used for testing and to help development
  */
-public class TimerMonthlyDay extends Timer
+public class TimerMonthlyDay implements ITimer
 {
     int mTime;
 
@@ -30,5 +30,12 @@ public class TimerMonthlyDay extends Timer
     public boolean occursOn(Calendar day)
     {
         return true;
+    }
+
+    @Override
+    public ETimers getTimerType()
+    {
+        //TODO
+        return ETimers.TIMER_DATE;
     }
 }

@@ -8,15 +8,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.studiodan.breathe.fragments.FragmentRoutines;
 import io.studiodan.breathe.models.routines.AdapterTimerSelect;
 import io.studiodan.breathe.models.routines.ETimers;
-import io.studiodan.breathe.models.routines.Timer;
+import io.studiodan.breathe.models.routines.ITimer;
+import io.studiodan.breathe.models.routines.RoutineElement;
 
 public class ActivityAddRoutine extends AppCompatActivity
 {
@@ -29,7 +34,9 @@ public class ActivityAddRoutine extends AppCompatActivity
     private AdapterTimerSelect mAdapter;
     private RecyclerView.LayoutManager mLMTimerSelect;
 
-    private List<Timer> mTimers;
+    private LinearLayout mInputLayout;
+
+    private List<ITimer> mTimers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -57,7 +64,29 @@ public class ActivityAddRoutine extends AppCompatActivity
         mLMTimerSelect = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRVTimerSelect.setLayoutManager(mLMTimerSelect);
 
+        mInputLayout = (LinearLayout) findViewById(R.id.layout_input);
+
         mTimers = new ArrayList<>();
+
+
+        mRoutineSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+            {
+                if(position == 0)
+                {
+                    mInputLayout.removeAllViews();
+                    View v = getLayoutInflater().inflate(R.layout.routine_creator_simple, mInputLayout);
+                    //mInputLayout.addView(v);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView)
+            {
+            }
+        });
     }
 
     @Override
@@ -108,14 +137,16 @@ public class ActivityAddRoutine extends AppCompatActivity
         }
     }
 
-    public void addTimer(Timer rt)
+    public void addTimer(ITimer rt)
     {
         mTimers.add(rt);
     }
 
     private void createRoutine()
     {
-
+        String title = ((EditText) findViewById(R.id.title)).getText().toString();
+        RoutineElement r = new RoutineElement(title, mTimers.toArray(new ITimer[0]));
+        FragmentRoutines.mRoutines.add(r);
     }
 }
 

@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,12 @@ import android.view.ViewGroup;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -24,14 +28,18 @@ import io.studiodan.breathe.ActivityAddRoutine;
 import io.studiodan.breathe.BuildConfig;
 import io.studiodan.breathe.R;
 import io.studiodan.breathe.models.routines.AdapterTimeline;
+import io.studiodan.breathe.models.routines.ITimer;
+import io.studiodan.breathe.models.routines.ITimerJsonAdapter;
 import io.studiodan.breathe.models.routines.TimerMonthlyDate;
 import io.studiodan.breathe.models.routines.RoutineElement;
 import io.studiodan.breathe.models.routines.RoutineInstance;
 import io.studiodan.breathe.util.UtilFile;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
+
 public class FragmentRoutines extends Fragment
 {
-    List<RoutineElement> mRoutines;
+    public static List<RoutineElement> mRoutines = new ArrayList<>();
 
     private RecyclerView mRecyclerView;
     private AdapterTimeline mAdapter;
@@ -44,6 +52,8 @@ public class FragmentRoutines extends Fragment
     private AdView mAdView;
 
 
+    Gson gsonObj;
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -51,11 +61,20 @@ public class FragmentRoutines extends Fragment
 
         mFilePath = getContext().getFilesDir() + "/routine_data.json";
 
+        {
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(ITimer.class, new ITimerJsonAdapter());
+            gsonObj = builder.create();
+        }
+
         //Load the serialized routines
         try
         {
             String data = UtilFile.getStringFromFile(mFilePath);
-            mRoutines = new Gson().fromJson(data, ArrayList.class);
+
+            Type collectionType = new TypeToken<ArrayList<RoutineElement>>(){}.getType();
+
+            mRoutines = gsonObj.fromJson(data, collectionType);
         }
         catch(Exception e)
         {
@@ -64,10 +83,9 @@ public class FragmentRoutines extends Fragment
 
 
         //TODO Create actual system for creating routines
-        mRoutines = new ArrayList<>();
-        mRoutines.add(new RoutineElement("Test item 0", new TimerMonthlyDate(3*60)));
-        mRoutines.add(new RoutineElement("Test item 1", new TimerMonthlyDate(33), new TimerMonthlyDate(10*60 + 45)));
-        mRoutines.add(new RoutineElement("Test item 2", new TimerMonthlyDate(17*60 + 5)));
+        //mRoutines.add(new RoutineElement("Test item 0", new TimerMonthlyDate(3*60)));
+        //mRoutines.add(new RoutineElement("Test item 1", new TimerMonthlyDate(33), new TimerMonthlyDate(10*60 + 45)));
+        //mRoutines.add(new RoutineElement("Test item 2", new TimerMonthlyDate(17*60 + 5)));
     }
 
     @Override
@@ -135,8 +153,15 @@ public class FragmentRoutines extends Fragment
     {
         super.onPause();
 
-        String jsonOut = new Gson().toJson(mRoutines);
+        saveData();
+    }
+
+    private void saveData()
+    {
+        String jsonOut = gsonObj.toJson(mRoutines);
         FileOutputStream outputStream;
+
+        Log.d("Breathe", "FilePath:    " + mFilePath);
 
         try
         {

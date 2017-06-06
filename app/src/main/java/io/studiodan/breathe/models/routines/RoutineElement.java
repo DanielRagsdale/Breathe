@@ -31,20 +31,20 @@ import java.util.List;
 public class RoutineElement
 {
     String mTitle;
-    List<Timer> mTimers;
+    List<ITimer> mTimers;
 
     /**
      * Create a new basic routine element with given title
      *
      * @param title the title of this routine
      */
-    public RoutineElement(String title, Timer... timers)
+    public RoutineElement(String title, ITimer... timers)
     {
         this(timers);
         mTitle = title;
     }
 
-    protected RoutineElement(Timer... timers)
+    protected RoutineElement(ITimer... timers)
     {
         mTimers = Arrays.asList(timers);
     }
@@ -59,7 +59,7 @@ public class RoutineElement
     {
         ArrayList<RoutineInstance> ri = new ArrayList<>();
 
-        for(Timer t : mTimers)
+        for(ITimer t : mTimers)
         {
             ri.add(new RoutineElement.Instance(t.getPeriodOnDay(Calendar.getInstance()), mTitle));
         }

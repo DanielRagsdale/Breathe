@@ -3,15 +3,10 @@ package io.studiodan.breathe.models.routines;
 import java.util.Calendar;
 
 /**
- * Dummy Timer. Used for testing and to help development
+ * Dummy ITimer. Used for testing and to help development
  */
-public class TimerWeekly extends Timer
+public class TimerWeekly implements ITimer
 {
-    static
-    {
-        mType = ETimers.TIMER_WEEKLY;
-    }
-
     TimePeriod mPeriod;
     boolean[] mDays;
 
@@ -44,5 +39,11 @@ public class TimerWeekly extends Timer
         int d = checkDay.get(Calendar.DAY_OF_WEEK);
 
         return mDays[d];
+    }
+
+    @Override
+    public ETimers getTimerType()
+    {
+        return ETimers.TIMER_WEEKLY;
     }
 }

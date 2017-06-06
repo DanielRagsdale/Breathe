@@ -126,6 +126,11 @@ public class FragmentLifeList extends Fragment
     {
         super.onPause();
 
+        saveData();
+    }
+
+    private void saveData()
+    {
         String jsonOut = new Gson().toJson(topList);
         FileOutputStream outputStream;
 

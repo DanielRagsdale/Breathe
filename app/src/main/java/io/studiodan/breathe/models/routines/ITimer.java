@@ -18,17 +18,15 @@ import java.util.Calendar;
  *      Different time ranges can be specified by using multiple of the same kind of timer
  *
  */
-public abstract class Timer
+public interface ITimer
 {
-    public static ETimers mType;
-
     /**
      * Get a TimePeriods representing when this routine is scheduled
      *
      * @param day what day to get TimePeriod for
      * @return the TimePeriods
      */
-    public abstract TimePeriod getPeriodOnDay(Calendar day);
+    TimePeriod getPeriodOnDay(Calendar day);
 
     /**
      * Does the routine element occur on the given day
@@ -36,7 +34,9 @@ public abstract class Timer
      * @param day the day that is checked for occurance
      * @return whether or not the routine element occurs on that day
      */
-    public abstract boolean occursOn(Calendar day);
+    boolean occursOn(Calendar day);
+
+    ETimers getTimerType();
 
 }
 

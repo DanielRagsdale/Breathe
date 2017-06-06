@@ -40,7 +40,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentDrawer.Fr
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
 
-        displayView(1);
+        displayView(2);
 
     }
 

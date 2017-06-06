@@ -182,6 +182,14 @@
         android:textSize="16dp"
         android:layout_margin="12dp"/>
 
+    <TimePicker
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-12dp"
+        android:layout_marginBottom="-12dp"
+        android:id="@+id/tp_start_time"
+        android:timePickerMode="spinner"/>
+
     <TextView
         android:text="Duration"
         android:layout_width="match_parent"
