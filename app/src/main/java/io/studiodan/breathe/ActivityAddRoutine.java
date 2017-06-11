@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,11 +15,13 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.studiodan.breathe.fragments.FragmentRoutines;
+import io.studiodan.breathe.models.routines.AdapterActiveTimers;
 import io.studiodan.breathe.models.routines.AdapterTimerSelect;
 import io.studiodan.breathe.models.routines.ETimers;
 import io.studiodan.breathe.models.routines.ITimer;
@@ -25,24 +29,33 @@ import io.studiodan.breathe.models.routines.RoutineElement;
 
 public class ActivityAddRoutine extends AppCompatActivity
 {
+    public List<ITimer> mTimers;
+
     private Toolbar mToolbar;
 
     private Spinner mRoutineSelect;
     private ArrayAdapter<String> mSpinnerAdapter;
 
+    private RecyclerView mRVActiveTimers;
+    private AdapterActiveTimers mAdapterActiveTimers;
+    private RecyclerView.LayoutManager mLMActiveTimers;
+
     private RecyclerView mRVTimerSelect;
-    private AdapterTimerSelect mAdapter;
+    private AdapterTimerSelect mAdapterTimerSelect;
     private RecyclerView.LayoutManager mLMTimerSelect;
 
     private LinearLayout mInputLayout;
-
-    private List<ITimer> mTimers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_routine);
+
+
+        mTimers = new ArrayList<>();
+
+
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -51,23 +64,48 @@ public class ActivityAddRoutine extends AppCompatActivity
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         mRoutineSelect = (Spinner) findViewById(R.id.spinner_routine_select);
-
         String[] rTypes = getResources().getStringArray(R.array.routine_types);
         mSpinnerAdapter = new ArrayAdapter<String>(this, R.layout.item_routine_select, rTypes);
         mRoutineSelect.setAdapter(mSpinnerAdapter);
 
+        mRVActiveTimers = (RecyclerView) findViewById(R.id.rv_active_timers);
+        mAdapterActiveTimers = new AdapterActiveTimers(mTimers);
+        mRVActiveTimers.setAdapter(mAdapterActiveTimers);
+        mLMActiveTimers = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRVActiveTimers.setLayoutManager(mLMActiveTimers);
+
+
+
+
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target)
+            {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir)
+            {
+                mTimers.remove(viewHolder.getAdapterPosition());
+                mAdapterActiveTimers.notifyDataSetChanged();
+
+                Toast.makeText(ActivityAddRoutine.this, "Timer removed", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(mRVActiveTimers);
+
+
         mRVTimerSelect = (RecyclerView) findViewById(R.id.rv_timer_select);
-
-        mAdapter = new AdapterTimerSelect();
-        mRVTimerSelect.setAdapter(mAdapter);
-
+        mAdapterTimerSelect = new AdapterTimerSelect();
+        mRVTimerSelect.setAdapter(mAdapterTimerSelect);
         mLMTimerSelect = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRVTimerSelect.setLayoutManager(mLMTimerSelect);
 
+
         mInputLayout = (LinearLayout) findViewById(R.id.layout_input);
-
-        mTimers = new ArrayList<>();
-
 
         mRoutineSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
@@ -140,6 +178,7 @@ public class ActivityAddRoutine extends AppCompatActivity
     public void addTimer(ITimer rt)
     {
         mTimers.add(rt);
+        mAdapterActiveTimers.notifyDataSetChanged();
     }
 
     private void createRoutine()

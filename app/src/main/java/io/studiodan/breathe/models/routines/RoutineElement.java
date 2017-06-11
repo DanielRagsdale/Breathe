@@ -61,7 +61,10 @@ public class RoutineElement
 
         for(ITimer t : mTimers)
         {
-            ri.add(new RoutineElement.Instance(t.getPeriodOnDay(Calendar.getInstance()), mTitle));
+            if(t.occursOn(day))
+            {
+                ri.add(new RoutineElement.Instance(t.getPeriodOnDay(day), mTitle));
+            }
         }
         return ri;
     }

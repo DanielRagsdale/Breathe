@@ -37,7 +37,7 @@ public class ITimerJsonAdapter implements JsonSerializer<ITimer>, JsonDeserializ
     @Override
     public ITimer deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
     {
-        Log.d("Breathe", "Deserialization attempted. ************************************");
+        //Log.d("Breathe", "Deserialization attempted. ************************************");
 
         JsonObject jsonObject = json.getAsJsonObject();
         JsonPrimitive prim = (JsonPrimitive) jsonObject.get(CLASSNAME);

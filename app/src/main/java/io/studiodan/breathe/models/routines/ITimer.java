@@ -36,6 +36,13 @@ public interface ITimer
      */
     boolean occursOn(Calendar day);
 
+    /**
+     * Provide a description of this timer.
+     *
+     * @return the string description of this ITimer
+     */
+    String description();
+
     ETimers getTimerType();
 
 }

@@ -27,6 +27,8 @@ public class DialogCreateTimerWeekly extends DialogFragment
 
     TimePicker mTimePicker;
 
+    //Max of 80
+    //2*6 + 12*4 + 10*2
     SeekBar mDurationBar;
     TextView mDurationText;
 
@@ -42,6 +44,25 @@ public class DialogCreateTimerWeekly extends DialogFragment
 
         Button b = (Button) mainV.findViewById(R.id.button_confirm_new_timer);
 
+        mDurationText.setText(String.format("%02d:%02d", mDuration / 60, mDuration % 60));
+        mDurationBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+            {
+                if(fromUser)
+                {
+                    mDuration = barToTime(progress);
+                    mDurationText.setText(String.format("%02d:%02d", mDuration / 60, mDuration % 60));
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
 
         b.setOnClickListener(new View.OnClickListener()
         {
@@ -52,7 +73,7 @@ public class DialogCreateTimerWeekly extends DialogFragment
                 for(int i = 0; i < cStates.length; i++)
                 {
                     CheckBox cb = (CheckBox) mainV.findViewById(getActivity().getResources().getIdentifier("cb_day_" + i, "id", getActivity().getPackageName()));
-
+                    mDurationText.setText(String.format("%02d:%02d", mDuration / 60, mDuration % 60));
                     if(cb != null)
                     {
                         cStates[i] = cb.isChecked();
@@ -69,4 +90,20 @@ public class DialogCreateTimerWeekly extends DialogFragment
 
         return mainV;
     }
+
+    //2*6 + 12*4 + 10*2
+    private int barToTime(int barVal)
+    {
+        int minutes = 0;
+        minutes += 10 * Math.min(12, barVal);
+        minutes += 15 * Math.min(48, Math.max(0, barVal - 12));
+        minutes += 30 * Math.min(20, Math.max(0, barVal - 60));
+
+        return minutes;
+    }
 }
+
+
+
+
+

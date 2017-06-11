@@ -33,6 +33,12 @@ public class TimerMonthlyDay implements ITimer
     }
 
     @Override
+    public String description()
+    {
+        return "";
+    }
+
+    @Override
     public ETimers getTimerType()
     {
         //TODO
